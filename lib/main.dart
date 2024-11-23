@@ -1,15 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:movie_application/controllers/movie_controller.dart';
+import 'package:movie_application/controllers/navigation_controller.dart';
+import 'package:movie_application/data/movie_data.dart';
+import 'package:movie_application/screens/detail_screen.dart';
 import 'package:movie_application/screens/home_screen.dart';
+import 'package:movie_application/screens/profile_screen.dart';
 
 void main() {
   runApp(
-    const MainApp(),
+    MainApp(),
   );
 }
 
+final routes = [
+  GetPage(name: "/", page: () => HomeScreen()),
+  GetPage(
+      name: "/detail-movie", page: () => DetailScreen(movie: Get.arguments)),
+  GetPage(name: "/profile", page: () => const ProfileScreen()),
+];
+
 class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+  MainApp({super.key});
+  final MovieController mc = Get.put(MovieController());
+  final NavigationController rc = Get.put(NavigationController());
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
@@ -46,7 +60,9 @@ class MainApp extends StatelessWidget {
           backgroundColor: Color.fromARGB(255, 255, 255, 255),
         ),
       ),
+      getPages: routes,
       home: HomeScreen(),
+      // home: DetailScreen(movie: movieList[0]),
     );
   }
 }

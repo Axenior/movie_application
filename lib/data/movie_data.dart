@@ -9,7 +9,7 @@ var movieList = [
     genre: "Dokumenter, Keluarga",
     director: "Rudy Bednar",
     rated: "TV-G",
-    runTime: 44,
+    runTime: "44 menit",
     poster:
         'https://m.media-amazon.com/images/M/MV5BMTk0NjAzNjg4NF5BMl5BanBnXkFtZTgwNDQ3NjIwMzE@._V1_SX300.jpg',
     imageUrls: [],
@@ -25,7 +25,7 @@ var movieList = [
     genre: "Aksi, Petualangan, Fiksi Ilmiah",
     director: "Anna Boden, Ryan Fleck",
     rated: "PG-13",
-    runTime: 123,
+    runTime: "2 jam 3 menit",
     poster:
         "https://m.media-amazon.com/images/M/MV5BZDI1NGU2ODAtNzBiNy00MWY5LWIyMGEtZjUxZjUwZmZiNjBlXkEyXkFqcGc@._V1_SX300.jpg",
     imageUrls: [],
@@ -43,7 +43,7 @@ var movieList = [
     rated: "PG-13",
     poster:
         "https://m.media-amazon.com/images/M/MV5BNzUyM2YyY2MtNzNlMS00MWU5LTgxNjAtNzZlNmI2NjU2NDZlXkEyXkFqcGc@._V1_SX300.jpg",
-    runTime: 124,
+    runTime: "2 jam 4 menit",
     imageUrls: [],
     rating: 6.9,
     votes: 911838,

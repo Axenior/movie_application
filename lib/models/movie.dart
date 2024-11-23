@@ -6,7 +6,7 @@ class Movie {
   final String director;
   final String rated;
   final String poster;
-  final int runTime;
+  final String runTime;
   final List<String> imageUrls;
   double rating;
   int votes;

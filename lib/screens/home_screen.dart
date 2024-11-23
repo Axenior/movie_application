@@ -1,31 +1,17 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:movie_application/components/BottomNavigationBarComponent.dart';
+import 'package:movie_application/controllers/movie_controller.dart';
+import 'package:movie_application/controllers/navigation_controller.dart';
 import 'package:movie_application/data/movie_data.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:movie_application/models/movie.dart';
-import 'package:movie_application/screens/detail_screen.dart';
-
-class MovieController extends GetxController {
-  Rx<Movie> activeMovie = movieList[0].obs;
-  Rx<Movie> detailMovie = movieList[0].obs;
-
-  dynamic setActiveMovie(Movie movie) {
-    activeMovie.value = movie;
-  }
-
-  dynamic setDetailMovie(Movie movie) {
-    detailMovie.value = movie;
-  }
-}
-
-class RouteController extends GetxController {}
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
 
-  final MovieController mc = Get.put(MovieController());
+  final MovieController mc = Get.find();
+  final NavigationController nc = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -37,24 +23,19 @@ class HomeScreen extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () {},
-            icon: FaIcon(
-              FontAwesomeIcons.circleUser,
+            icon: Icon(
+              Icons.notifications,
               size: 25,
               color: Theme.of(context).colorScheme.primary,
             ),
             padding: EdgeInsets.zero,
           ),
-          IconButton(
-            onPressed: () {},
-            icon: FaIcon(
-              FontAwesomeIcons.bell,
-              size: 25,
-              color: Theme.of(context).colorScheme.primary,
-            ),
-            padding: EdgeInsets.zero,
-          ),
+          const SizedBox(
+            width: 10,
+          )
         ],
       ),
+      bottomNavigationBar: const BottomNavigationBarComponent(),
       body: SingleChildScrollView(
         child: SafeArea(
           child: Column(
@@ -131,10 +112,10 @@ class HomeScreen extends StatelessWidget {
                         minimumSize: Size.zero,
                       ),
                       onPressed: () {},
-                      icon: const FaIcon(
-                        FontAwesomeIcons.heart,
+                      icon: const Icon(
+                        Icons.favorite_outline,
                         size: 15,
-                        color: Color.fromARGB(255, 196, 96, 127),
+                        color: Colors.pink,
                       ),
                       label: Text(
                         "Watchlist Saya",
@@ -173,12 +154,10 @@ class HomeScreen extends StatelessWidget {
                     padding: const EdgeInsets.only(left: 8),
                     child: GestureDetector(
                       onTap: () {
-                        // print("onTap");
-                        mc.setDetailMovie(movieList[index]);
-                        Get.to(const DetailScreen());
+                        Get.toNamed("/detail-movie",
+                            arguments: movieList[index]);
                       },
                       child: Container(
-                        // width: MediaQuery.of(context).size.width,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(12),
                         ),
@@ -231,19 +210,20 @@ class HomeScreen extends StatelessWidget {
                                     text: "Rating film ini ",
                                   ),
                                   const WidgetSpan(
-                                    child: FaIcon(
-                                      FontAwesomeIcons.solidStar,
+                                    child: Icon(
+                                      Icons.star,
                                       color: Colors.amber,
                                       size: 15, // Icon size
                                     ),
                                   ),
                                   TextSpan(
-                                    text: " ${mc.activeMovie.value.rating} ",
+                                    text: mc.activeMovie.value.rating
+                                        .toStringAsFixed(1),
                                     style:
                                         Theme.of(context).textTheme.labelSmall,
                                   ),
                                   const TextSpan(
-                                    text: "lho, penasaran ngga sebagus apa?",
+                                    text: " lho, penasaran ngga sebagus apa?",
                                   ),
                                 ],
                               ),
