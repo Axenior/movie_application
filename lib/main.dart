@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:movie_application/controllers/movie_controller.dart';
 import 'package:movie_application/controllers/navigation_controller.dart';
-import 'package:movie_application/data/movie_data.dart';
 import 'package:movie_application/screens/detail_screen.dart';
 import 'package:movie_application/screens/home_screen.dart';
+import 'package:movie_application/screens/list_movie_screen.dart';
 import 'package:movie_application/screens/profile_screen.dart';
 
 void main() {
@@ -14,10 +14,22 @@ void main() {
 }
 
 final routes = [
-  GetPage(name: "/", page: () => HomeScreen()),
   GetPage(
-      name: "/detail-movie", page: () => DetailScreen(movie: Get.arguments)),
-  GetPage(name: "/profile", page: () => const ProfileScreen()),
+    name: "/",
+    page: () => const HomeScreen(),
+  ),
+  GetPage(
+    name: "/detail-movie",
+    page: () => DetailScreen(movie: Get.arguments),
+  ),
+  GetPage(
+    name: "/list-movie",
+    page: () => const ListMovieScreen(),
+  ),
+  GetPage(
+    name: "/profile",
+    page: () => const ProfileScreen(),
+  ),
 ];
 
 class MainApp extends StatelessWidget {
@@ -61,7 +73,7 @@ class MainApp extends StatelessWidget {
         ),
       ),
       getPages: routes,
-      home: HomeScreen(),
+      home: const HomeScreen(),
       // home: DetailScreen(movie: movieList[0]),
     );
   }
