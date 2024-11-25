@@ -1,25 +1,27 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:movie_application/components/BottomNavigationBarComponent.dart';
-import 'package:movie_application/controllers/movie_controller.dart';
 import 'package:movie_application/controllers/navigation_controller.dart';
 import 'package:movie_application/data/movie_data.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:movie_application/models/movie.dart';
 
-class HomeScreen extends StatelessWidget {
-  HomeScreen({super.key});
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
 
-  final MovieController mc = Get.find();
-  final NavigationController nc = Get.find();
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  Movie activeMovie = movieList[0];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          "Movieku",
-        ),
+        title: const Text("Movieku"),
         actions: [
           IconButton(
             onPressed: () {},
@@ -30,9 +32,7 @@ class HomeScreen extends StatelessWidget {
             ),
             padding: EdgeInsets.zero,
           ),
-          const SizedBox(
-            width: 10,
-          )
+          const SizedBox(width: 10)
         ],
       ),
       bottomNavigationBar: const BottomNavigationBarComponent(),
@@ -41,9 +41,7 @@ class HomeScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Divider(
-                thickness: 0.2,
-              ),
+              const Divider(thickness: 0.2),
               Padding(
                 padding: const EdgeInsets.fromLTRB(15, 5, 15, 10),
                 child: SizedBox(
@@ -94,10 +92,15 @@ class HomeScreen extends StatelessWidget {
                         side: BorderSide(
                           color: Theme.of(context).colorScheme.secondary,
                         ),
-                        padding: const EdgeInsets.all(12),
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 5,
+                          horizontal: 10,
+                        ),
                         minimumSize: Size.zero,
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        Get.toNamed("list-movie");
+                      },
                       child: Text(
                         "Semua Film",
                         style: Theme.of(context).textTheme.labelSmall,
@@ -108,7 +111,10 @@ class HomeScreen extends StatelessWidget {
                         side: BorderSide(
                           color: Theme.of(context).colorScheme.secondary,
                         ),
-                        padding: const EdgeInsets.all(12),
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 5,
+                          horizontal: 10,
+                        ),
                         minimumSize: Size.zero,
                       ),
                       onPressed: () {},
@@ -125,9 +131,7 @@ class HomeScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              const Divider(
-                thickness: 0.2,
-              ),
+              const Divider(thickness: 0.2),
               Padding(
                 padding: const EdgeInsets.only(
                   left: 15,
@@ -146,7 +150,9 @@ class HomeScreen extends StatelessWidget {
                   autoPlay: true,
                   height: 300,
                   onPageChanged: (index, reason) {
-                    mc.setActiveMovie(movieList[index]);
+                    setState(() {
+                      activeMovie = movieList[index]; // Update active movie
+                    });
                   },
                 ),
                 itemBuilder: (context, index, realIdx) {
@@ -173,67 +179,61 @@ class HomeScreen extends StatelessWidget {
                   );
                 },
               ),
-              Obx(
-                () {
-                  return Container(
-                    alignment: Alignment.center,
-                    decoration: const BoxDecoration(
-                      gradient: LinearGradient(
-                          colors: [
-                            Color.fromARGB(255, 220, 218, 241),
-                            Colors.white
-                          ], // Warna gradasi
-                          begin: Alignment.bottomCenter,
-                          end: Alignment.topCenter),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 18,
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 15),
-                        child: Column(
-                          children: [
-                            Text(
-                              mc.activeMovie.value.title.toUpperCase(),
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                              style: Theme.of(context).textTheme.titleLarge,
-                              textAlign: TextAlign.center,
-                            ),
-                            Text.rich(
-                              textAlign: TextAlign.center,
-                              TextSpan(
-                                style: Theme.of(context).textTheme.bodySmall,
-                                children: [
-                                  const TextSpan(
-                                    text: "Rating film ini ",
-                                  ),
-                                  const WidgetSpan(
-                                    child: Icon(
-                                      Icons.star,
-                                      color: Colors.amber,
-                                      size: 15, // Icon size
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: mc.activeMovie.value.rating
-                                        .toStringAsFixed(1),
-                                    style:
-                                        Theme.of(context).textTheme.labelSmall,
-                                  ),
-                                  const TextSpan(
-                                    text: " lho, penasaran ngga sebagus apa?",
-                                  ),
-                                ],
-                              ),
-                            )
-                          ],
+              Container(
+                alignment: Alignment.center,
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                      colors: [
+                        Color.fromARGB(255, 220, 218, 241),
+                        Colors.white
+                      ], // Warna gradasi
+                      begin: Alignment.bottomCenter,
+                      end: Alignment.topCenter),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 18,
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
+                    child: Column(
+                      children: [
+                        Text(
+                          activeMovie.title.toUpperCase(),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                          style: Theme.of(context).textTheme.titleLarge,
+                          textAlign: TextAlign.center,
                         ),
-                      ),
+                        Text.rich(
+                          textAlign: TextAlign.center,
+                          TextSpan(
+                            style: Theme.of(context).textTheme.bodySmall,
+                            children: [
+                              const TextSpan(
+                                text: "Rating film ini ",
+                              ),
+                              const WidgetSpan(
+                                child: Icon(
+                                  Icons.star,
+                                  color: Colors.amber,
+                                  size: 15, // Icon size
+                                ),
+                              ),
+                              TextSpan(
+                                text: activeMovie.rating.toStringAsFixed(1),
+                                style: Theme.of(context).textTheme.labelSmall,
+                              ),
+                              const TextSpan(
+                                text: " lho, penasaran ngga sebagus apa?",
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
-                  );
-                },
+                  ),
+                ),
               ),
             ],
           ),
