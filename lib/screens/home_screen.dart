@@ -34,6 +34,10 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           const SizedBox(width: 10)
         ],
+        bottom: const PreferredSize(
+          preferredSize: Size.fromHeight(1),
+          child: Divider(thickness: 0.2),
+        ),
       ),
       bottomNavigationBar: const BottomNavigationBarComponent(),
       body: SingleChildScrollView(
@@ -41,7 +45,6 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Divider(thickness: 0.2),
               Padding(
                 padding: const EdgeInsets.fromLTRB(15, 5, 15, 10),
                 child: SizedBox(
@@ -117,7 +120,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         minimumSize: Size.zero,
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        Get.toNamed("watchlist");
+                      },
                       icon: const Icon(
                         Icons.favorite_outline,
                         size: 15,
