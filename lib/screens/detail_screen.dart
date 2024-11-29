@@ -1,25 +1,40 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 import 'package:movie_application/models/movie.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
-class DetailScreen extends StatelessWidget {
+class DetailScreen extends StatefulWidget {
   final Movie movie;
   const DetailScreen({super.key, required this.movie});
 
+  @override
+  State<DetailScreen> createState() => _DetailScreenState();
+}
+
+class _DetailScreenState extends State<DetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Detail Film"),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context, true);
+          },
+        ),
+        bottom: const PreferredSize(
+          preferredSize: Size.fromHeight(1),
+          child: Divider(thickness: 0.2),
+        ),
       ),
       body: SingleChildScrollView(
         child: SafeArea(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Divider(thickness: 0.2),
               Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Row(
@@ -31,7 +46,7 @@ class DetailScreen extends StatelessWidget {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(10),
                         child: CachedNetworkImage(
-                          imageUrl: movie.poster,
+                          imageUrl: widget.movie.poster,
                           fit: BoxFit.cover,
                           errorWidget: (context, url, error) =>
                               const FaIcon(Icons.error),
@@ -46,7 +61,7 @@ class DetailScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            movie.title,
+                            widget.movie.title,
                             style: Theme.of(context).textTheme.titleMedium,
                           ),
                           const SizedBox(height: 8),
@@ -65,7 +80,7 @@ class DetailScreen extends StatelessWidget {
                               ),
                               Expanded(
                                 child: Text(
-                                  movie.genre,
+                                  widget.movie.genre,
                                   style: const TextStyle(fontSize: 12),
                                 ),
                               ),
@@ -87,7 +102,7 @@ class DetailScreen extends StatelessWidget {
                               ),
                               Expanded(
                                 child: Text(
-                                  movie.runTime,
+                                  widget.movie.runTime,
                                   style: const TextStyle(
                                     fontSize: 12,
                                   ),
@@ -111,7 +126,7 @@ class DetailScreen extends StatelessWidget {
                               ),
                               Expanded(
                                 child: Text(
-                                  movie.director,
+                                  widget.movie.director,
                                   style: const TextStyle(
                                     fontSize: 12,
                                   ),
@@ -135,7 +150,7 @@ class DetailScreen extends StatelessWidget {
                               ),
                               Expanded(
                                 child: Text(
-                                  movie.rated,
+                                  widget.movie.rated,
                                   style: const TextStyle(
                                     fontSize: 12,
                                   ),
@@ -168,7 +183,7 @@ class DetailScreen extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  movie.rating.toStringAsFixed(1),
+                                  widget.movie.rating.toStringAsFixed(1),
                                   style: const TextStyle(
                                     fontSize: 22,
                                     color: Colors.amber,
@@ -179,7 +194,7 @@ class DetailScreen extends StatelessWidget {
                                   width: 5,
                                 ),
                                 RatingBarIndicator(
-                                  rating: movie.rating / 2,
+                                  rating: widget.movie.rating / 2,
                                   direction: Axis.horizontal,
                                   itemCount: 5,
                                   itemSize: 18,
@@ -196,7 +211,7 @@ class DetailScreen extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  "${movie.votes} Vote",
+                                  "${widget.movie.votes} Vote",
                                   style: TextStyle(
                                     fontSize: 12,
                                     color: Colors.grey.shade800,
@@ -220,22 +235,34 @@ class DetailScreen extends StatelessWidget {
                       ),
                     ),
                     Flexible(
-                      child: GestureDetector(
-                        onTap: () {},
+                      child: InkWell(
+                        onTap: () {
+                          setState(
+                            () {
+                              widget.movie.isWatchlist =
+                                  !widget.movie.isWatchlist;
+                              widget.movie.watchlist = widget.movie.isWatchlist
+                                  ? widget.movie.watchlist + 1
+                                  : widget.movie.watchlist - 1;
+                            },
+                          );
+                        },
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Row(
+                            Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Icon(
-                                  Icons.favorite_outline,
+                                  widget.movie.isWatchlist
+                                      ? Icons.favorite
+                                      : Icons.favorite_outline,
                                   color: Colors.pink,
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   width: 5,
                                 ),
-                                Text(
+                                const Text(
                                   "Masukkan watchlist",
                                   style: TextStyle(
                                     fontSize: 12,
@@ -245,7 +272,7 @@ class DetailScreen extends StatelessWidget {
                               ],
                             ),
                             Text(
-                              "${movie.watchlist} Orang",
+                              "${widget.movie.watchlist} Orang",
                               style: TextStyle(
                                 fontSize: 12,
                                 color: Colors.grey.shade800,
@@ -273,7 +300,7 @@ class DetailScreen extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(10),
                 child: Text(
-                  movie.plot,
+                  widget.movie.plot,
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
               ),

@@ -12,7 +12,6 @@ var movieList = [
     runTime: "44 menit",
     poster:
         'https://m.media-amazon.com/images/M/MV5BMTk0NjAzNjg4NF5BMl5BanBnXkFtZTgwNDQ3NjIwMzE@._V1_SX300.jpg',
-    imageUrls: [],
     rating: 8.0,
     votes: 567,
     watchlist: 76,
@@ -28,7 +27,6 @@ var movieList = [
     runTime: "2 jam 3 menit",
     poster:
         "https://m.media-amazon.com/images/M/MV5BZDI1NGU2ODAtNzBiNy00MWY5LWIyMGEtZjUxZjUwZmZiNjBlXkEyXkFqcGc@._V1_SX300.jpg",
-    imageUrls: [],
     rating: 6.8,
     votes: 623287,
     watchlist: 35126,
@@ -44,7 +42,6 @@ var movieList = [
     poster:
         "https://m.media-amazon.com/images/M/MV5BNzUyM2YyY2MtNzNlMS00MWU5LTgxNjAtNzZlNmI2NjU2NDZlXkEyXkFqcGc@._V1_SX300.jpg",
     runTime: "2 jam 4 menit",
-    imageUrls: [],
     rating: 6.9,
     votes: 911838,
     watchlist: 74461,

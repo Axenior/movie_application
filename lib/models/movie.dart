@@ -7,7 +7,6 @@ class Movie {
   final String rated;
   final String poster;
   final String runTime;
-  final List<String> imageUrls;
   double rating;
   int votes;
   int watchlist;
@@ -22,7 +21,6 @@ class Movie {
     required this.rated,
     required this.poster,
     required this.runTime,
-    required this.imageUrls,
     required this.rating,
     required this.votes,
     required this.watchlist,

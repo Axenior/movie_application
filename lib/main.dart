@@ -6,6 +6,7 @@ import 'package:movie_application/screens/detail_screen.dart';
 import 'package:movie_application/screens/home_screen.dart';
 import 'package:movie_application/screens/list_movie_screen.dart';
 import 'package:movie_application/screens/profile_screen.dart';
+import 'package:movie_application/screens/watchlist_screen.dart';
 
 void main() {
   runApp(
@@ -25,6 +26,10 @@ final routes = [
   GetPage(
     name: "/list-movie",
     page: () => const ListMovieScreen(),
+  ),
+  GetPage(
+    name: "/watchlist",
+    page: () => const WatchlistScreen(),
   ),
   GetPage(
     name: "/profile",

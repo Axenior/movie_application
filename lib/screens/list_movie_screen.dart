@@ -21,13 +21,16 @@ class _ListMovieScreenState extends State<ListMovieScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Semua Film"),
+        bottom: const PreferredSize(
+          preferredSize: Size.fromHeight(1),
+          child: Divider(thickness: 0.2),
+        ),
       ),
       body: SingleChildScrollView(
         child: SafeArea(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Divider(thickness: 0.2),
               Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: GridView.builder(
@@ -35,15 +38,16 @@ class _ListMovieScreenState extends State<ListMovieScreen> {
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: data.length,
                   gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                    maxCrossAxisExtent: 200, // Lebar maksimal item grid
-                    crossAxisSpacing: 10, // Jarak antar item horizontal
-                    mainAxisSpacing: 20, // Jarak antar item vertikal
+                    maxCrossAxisExtent: 200,
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 20,
                     childAspectRatio: 2 / 4.2,
                   ),
                   itemBuilder: (context, index) {
                     return GestureDetector(
                       onTap: () {
-                        Get.toNamed('detail-movie', arguments: data[index]);
+                        Get.toNamed('detail-movie', arguments: data[index])!
+                            .then((value) => setState(() {}));
                       },
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -68,6 +72,10 @@ class _ListMovieScreenState extends State<ListMovieScreen> {
                                   setState(() {
                                     data[index].isWatchlist =
                                         !data[index].isWatchlist;
+                                    data[index].watchlist =
+                                        data[index].isWatchlist
+                                            ? data[index].watchlist + 1
+                                            : data[index].watchlist - 1;
                                   });
                                 },
                                 child: Padding(
