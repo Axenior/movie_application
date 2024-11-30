@@ -1,9 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:get/get.dart';
 import 'package:movie_application/data/movie_data.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:movie_application/models/movie.dart';
 
 class ListMovieScreen extends StatefulWidget {
@@ -46,7 +44,8 @@ class _ListMovieScreenState extends State<ListMovieScreen> {
                   itemBuilder: (context, index) {
                     return GestureDetector(
                       onTap: () {
-                        Get.toNamed('detail-movie', arguments: data[index])!
+                        Navigator.pushNamed(context, '/detail-movie',
+                                arguments: movieList[index])
                             .then((value) => setState(() {}));
                       },
                       child: Column(
@@ -63,7 +62,7 @@ class _ListMovieScreenState extends State<ListMovieScreen> {
                                     imageUrl: data[index].poster,
                                     fit: BoxFit.cover,
                                     errorWidget: (context, url, error) =>
-                                        const FaIcon(Icons.error),
+                                        const Icon(Icons.error),
                                   ),
                                 ),
                               ),
@@ -149,9 +148,9 @@ class _ListMovieScreenState extends State<ListMovieScreen> {
                                 rating: data[index].rating / 2,
                                 direction: Axis.horizontal,
                                 itemCount: 5,
-                                itemSize: 12,
-                                itemBuilder: (context, index) => const FaIcon(
-                                  FontAwesomeIcons.solidStar,
+                                itemSize: 18,
+                                itemBuilder: (context, index) => const Icon(
+                                  Icons.star,
                                   color: Colors.amber,
                                 ),
                               ),

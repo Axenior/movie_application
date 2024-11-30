@@ -1,7 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:get/get.dart';
 import 'package:movie_application/models/movie.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
@@ -49,7 +47,7 @@ class _DetailScreenState extends State<DetailScreen> {
                           imageUrl: widget.movie.poster,
                           fit: BoxFit.cover,
                           errorWidget: (context, url, error) =>
-                              const FaIcon(Icons.error),
+                              const Icon(Icons.error),
                         ),
                       ),
                     ),
@@ -200,8 +198,8 @@ class _DetailScreenState extends State<DetailScreen> {
                                   itemSize: 18,
                                   itemPadding:
                                       const EdgeInsets.symmetric(horizontal: 1),
-                                  itemBuilder: (context, index) => const FaIcon(
-                                    FontAwesomeIcons.solidStar,
+                                  itemBuilder: (context, index) => const Icon(
+                                    Icons.star,
                                     color: Colors.amber,
                                   ),
                                 ),
