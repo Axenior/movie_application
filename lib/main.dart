@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:movie_application/controllers/movie_controller.dart';
-import 'package:movie_application/controllers/navigation_controller.dart';
+import 'package:movie_application/models/movie.dart';
+import 'package:movie_application/screens/main_screen.dart';
 import 'package:movie_application/screens/detail_screen.dart';
 import 'package:movie_application/screens/home_screen.dart';
 import 'package:movie_application/screens/list_movie_screen.dart';
@@ -14,34 +14,9 @@ void main() {
   );
 }
 
-final routes = [
-  GetPage(
-    name: "/",
-    page: () => const HomeScreen(),
-  ),
-  GetPage(
-    name: "/detail-movie",
-    page: () => DetailScreen(movie: Get.arguments),
-  ),
-  GetPage(
-    name: "/list-movie",
-    page: () => const ListMovieScreen(),
-  ),
-  GetPage(
-    name: "/watchlist",
-    page: () => const WatchlistScreen(),
-  ),
-  GetPage(
-    name: "/profile",
-    page: () => const ProfileScreen(),
-  ),
-];
-
 class MainApp extends StatelessWidget {
   MainApp({super.key});
-  final MovieController mc = Get.put(MovieController());
-  final NavigationController rc = Get.put(NavigationController());
-  @override
+
   Widget build(BuildContext context) {
     return GetMaterialApp(
       title: "Movie App",
@@ -77,8 +52,18 @@ class MainApp extends StatelessWidget {
           backgroundColor: Color.fromARGB(255, 255, 255, 255),
         ),
       ),
-      getPages: routes,
-      home: const HomeScreen(),
+      routes: {
+        // '/home': (context) => const HomeScreen(),
+        '/main': (context) => const MainScreen(),
+        '/detail-movie': (context) {
+          final movie = ModalRoute.of(context)!.settings.arguments as Movie;
+          return DetailScreen(movie: movie);
+        },
+        '/list-movie': (context) => const ListMovieScreen(),
+        '/watchlist-movie': (context) => const WatchlistScreen(),
+        // '/profile': (context) => const ProfileScreen(),
+      },
+      home: const MainScreen(),
       // home: DetailScreen(movie: movieList[0]),
     );
   }

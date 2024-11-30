@@ -1,8 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:movie_application/components/BottomNavigationBarComponent.dart';
-import 'package:movie_application/controllers/navigation_controller.dart';
 import 'package:movie_application/data/movie_data.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:movie_application/models/movie.dart';
@@ -39,7 +36,6 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Divider(thickness: 0.2),
         ),
       ),
-      bottomNavigationBar: const BottomNavigationBarComponent(),
       body: SingleChildScrollView(
         child: SafeArea(
           child: Column(
@@ -85,8 +81,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(
-                    left: 15, right: 15, top: 8, bottom: 8),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 8, horizontal: 15),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -102,7 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         minimumSize: Size.zero,
                       ),
                       onPressed: () {
-                        Get.toNamed("list-movie");
+                        Navigator.pushNamed(context, '/list-movie');
                       },
                       child: Text(
                         "Semua Film",
@@ -121,7 +117,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         minimumSize: Size.zero,
                       ),
                       onPressed: () {
-                        Get.toNamed("watchlist");
+                        Navigator.pushNamed(context, '/watchlist-movie');
                       },
                       icon: const Icon(
                         Icons.favorite_outline,
@@ -165,7 +161,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     padding: const EdgeInsets.only(left: 8),
                     child: GestureDetector(
                       onTap: () {
-                        Get.toNamed("/detail-movie",
+                        Navigator.pushNamed(context, '/detail-movie',
                             arguments: movieList[index]);
                       },
                       child: Container(

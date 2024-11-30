@@ -1,10 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:get/get.dart';
 import 'package:movie_application/models/movie.dart';
 import 'package:movie_application/data/movie_data.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class WatchlistScreen extends StatefulWidget {
   const WatchlistScreen({super.key});
@@ -14,7 +12,8 @@ class WatchlistScreen extends StatefulWidget {
 }
 
 class _WatchlistScreenState extends State<WatchlistScreen> {
-  List<Movie> data = movieList.where((movie) => movie.isWatchlist).toList();
+  List<Movie> movieWatchlist =
+      movieList.where((movie) => movie.isWatchlist).toList();
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +25,7 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
           child: Divider(thickness: 0.2),
         ),
       ),
-      body: data.isEmpty
+      body: movieWatchlist.isEmpty
           ? Center(
               child: Text(
                 "Kamu belum memiliki movie favoritemu",
@@ -44,7 +43,7 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
                   child: GridView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    itemCount: data.length,
+                    itemCount: movieWatchlist.length,
                     gridDelegate:
                         const SliverGridDelegateWithMaxCrossAxisExtent(
                       maxCrossAxisExtent: 200,
@@ -55,7 +54,8 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
                     itemBuilder: (context, index) {
                       return GestureDetector(
                         onTap: () {
-                          Get.toNamed('detail-movie', arguments: data[index])!
+                          Navigator.pushNamed(context, '/detail-movie',
+                                  arguments: movieWatchlist[index])
                               .then((value) => setState(() {}));
                         },
                         child: Column(
@@ -69,10 +69,10 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(10),
                                     child: CachedNetworkImage(
-                                      imageUrl: data[index].poster,
+                                      imageUrl: movieWatchlist[index].poster,
                                       fit: BoxFit.cover,
                                       errorWidget: (context, url, error) =>
-                                          const FaIcon(Icons.error),
+                                          const Icon(Icons.error),
                                     ),
                                   ),
                                 ),
@@ -80,12 +80,15 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
                                   onTap: () {
                                     setState(
                                       () {
-                                        data[index].isWatchlist =
-                                            !data[index].isWatchlist;
-                                        data[index].watchlist =
-                                            data[index].isWatchlist
-                                                ? data[index].watchlist + 1
-                                                : data[index].watchlist - 1;
+                                        movieWatchlist[index].isWatchlist =
+                                            !movieWatchlist[index].isWatchlist;
+                                        movieWatchlist[index]
+                                            .watchlist = movieWatchlist[index]
+                                                .isWatchlist
+                                            ? movieWatchlist[index].watchlist +
+                                                1
+                                            : movieWatchlist[index].watchlist -
+                                                1;
                                       },
                                     );
                                   },
@@ -102,9 +105,10 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
                                         padding: const EdgeInsets.all(5.0),
                                         child: Icon(
                                           Icons.favorite,
-                                          color: data[index].isWatchlist
-                                              ? Colors.pink
-                                              : Colors.white,
+                                          color:
+                                              movieWatchlist[index].isWatchlist
+                                                  ? Colors.pink
+                                                  : Colors.white,
                                         ),
                                       ),
                                     ),
@@ -114,7 +118,7 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
                             ),
                             const SizedBox(height: 8),
                             Text(
-                              data[index].title,
+                              movieWatchlist[index].title,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: const TextStyle(
@@ -130,7 +134,7 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
                                   padding:
                                       const EdgeInsets.symmetric(horizontal: 4),
                                   child: Text(
-                                    data[index].rated,
+                                    movieWatchlist[index].rated,
                                     style: TextStyle(
                                       color: Colors.grey.shade600,
                                       fontSize: 12,
@@ -141,7 +145,7 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
                                 const SizedBox(width: 8),
                                 Expanded(
                                   child: Text(
-                                    data[index].genre,
+                                    movieWatchlist[index].genre,
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
@@ -157,18 +161,20 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
                             Row(
                               children: [
                                 RatingBarIndicator(
-                                  rating: data[index].rating / 2,
+                                  rating: movieWatchlist[index].rating / 2,
                                   direction: Axis.horizontal,
                                   itemCount: 5,
                                   itemSize: 12,
-                                  itemBuilder: (context, index) => const FaIcon(
-                                    FontAwesomeIcons.solidStar,
+                                  itemBuilder: (context, index) => const Icon(
+                                    Icons.star,
                                     color: Colors.amber,
                                   ),
                                 ),
                                 const SizedBox(width: 4),
                                 Text(
-                                  data[index].rating.toStringAsFixed(1),
+                                  movieWatchlist[index]
+                                      .rating
+                                      .toStringAsFixed(1),
                                   style: const TextStyle(
                                     fontSize: 12,
                                     color: Colors.amber,
