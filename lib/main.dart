@@ -1,21 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:movie_application/models/movie.dart';
+import 'package:movie_application/screens/login_screen.dart';
 import 'package:movie_application/screens/main_screen.dart';
 import 'package:movie_application/screens/detail_screen.dart';
 import 'package:movie_application/screens/home_screen.dart';
 import 'package:movie_application/screens/list_movie_screen.dart';
 import 'package:movie_application/screens/profile_screen.dart';
 import 'package:movie_application/screens/watchlist_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
-  runApp(
-    MainApp(),
-  );
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+
+  bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+
+  runApp(MainApp(
+    isLoggedIn: isLoggedIn,
+  ));
 }
+// void main() {
+//   runApp(
+//     MainApp(),
+//   );
+// }
 
 class MainApp extends StatelessWidget {
-  MainApp({super.key});
+  final bool isLoggedIn;
+  const MainApp({super.key, required this.isLoggedIn});
+  // MainApp({super.key});
 
   Widget build(BuildContext context) {
     return GetMaterialApp(
@@ -52,8 +66,10 @@ class MainApp extends StatelessWidget {
           backgroundColor: Color.fromARGB(255, 255, 255, 255),
         ),
       ),
+      home: isLoggedIn ? const HomeScreen() : const LoginScreen(),
       routes: {
-        // '/home': (context) => const HomeScreen(),
+        '/login' : (context) => const LoginScreen(),
+        '/home': (context) => const HomeScreen(),
         '/main': (context) => const MainScreen(),
         '/detail-movie': (context) {
           final movie = ModalRoute.of(context)!.settings.arguments as Movie;
@@ -63,7 +79,7 @@ class MainApp extends StatelessWidget {
         '/watchlist-movie': (context) => const WatchlistScreen(),
         // '/profile': (context) => const ProfileScreen(),
       },
-      home: const MainScreen(),
+      // home: const MainScreen(),
       // home: DetailScreen(movie: movieList[0]),
     );
   }

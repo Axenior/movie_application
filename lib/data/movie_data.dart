@@ -50,7 +50,7 @@ var movieList = [
     id: "tt3501632",
     title: "Thor: Ragnarok",
     plot:
-        "Dihukum di planet Sakaar, Thor harus berlomba dengan waktu untuk kembali ke Asgard dan menghentikan Ragnarök, kehancuran dunianya, di tangan penjahat kuat dan kejam, Hela.",
+        "Dipenjara di sisi lain alam semesta, Thor yang perkasa (Chris Hemsworth) mendapati dirinya terlibat dalam pertarungan gladiator mematikan yang mempertemukannya dengan The Incredible Hulk (Mark Ruffalo), mantan sekutunya sekaligus sesama anggota Avengers. Upaya Thor untuk bertahan hidup membawanya dalam perlombaan melawan waktu untuk mencegah Hela yang maha kuasa (Cate Blanchett) menghancurkan dunia asalnya dan peradaban Asgard.",
     genre: "Aksi, Petualangan, Komedi",
     director: "Taika Waititi",
     rated: "PG-13",
@@ -65,7 +65,7 @@ var movieList = [
     id: "tt16428256",
     title: "Suzume",
     plot:
-        "Sebuah kisah petualangan aksi modern di mana seorang gadis berusia 17 tahun bernama Suzume membantu seorang pria muda misterius menutup pintu-pintu dari sisi lain yang melepaskan bencana di seluruh Jepang.",
+        "Suzume, seorang gadis berusia 17 tahun yang tinggal di kota kecil yang tenang di Kyushu, bertemu dengan seorang pemuda yang sedang dalam perjalanan 'mencari pintu-pintu.' Suzume mengikutinya hingga ke reruntuhan sebuah bangunan tua di pegunungan dan menemukan sebuah pintu yang berdiri sendiri, tampak tidak tersentuh seolah-olah hanya pintu itu yang selamat dari kehancuran. Suzume merasa tertarik oleh kekuatan tak terlihat dan meraih pintu tersebut. Tak lama kemudian, pintu-pintu di seluruh Jepang mulai terbuka satu per satu. Pintu-pintu yang telah terbuka harus segera ditutup untuk menghalau bencana yang mengintai di sisi lain. Tempat-tempat yang Suzume jelajahi dipenuhi dengan keindahan bintang-bintang, matahari terbenam, dan langit pagi, di mana semua waktu dalam sehari tampak menyatu menjadi satu.",
     genre: "Animasi, Aksi, Petualangan",
     director: "Makoto Shinkai",
     rated: "PG",
@@ -80,7 +80,7 @@ var movieList = [
     id: "tt22868844",
     title: "Black Clover: Sword of the Wizard King",
     plot:
-        "Di dunia di mana sihir adalah segalanya, Asta, seorang anak yang lahir tanpa sihir, bercita-cita menjadi \"Raja Penyihir\" untuk mengatasi rintangan, membuktikan kekuatannya, dan menepati janjinya kepada teman-temannya.",
+        "Di dunia di mana sihir adalah segalanya, Asta, seorang anak yang lahir tanpa sihir, bercita-cita menjadi 'Raja Penyihir' untuk mengatasi rintangan, membuktikan kekuatannya, dan menepati janjinya kepada teman-temannya.",
     genre: "Animasi, Aksi, Petualangan",
     director: "Ayataka Tanemura",
     rated: "TV-14",
@@ -88,7 +88,7 @@ var movieList = [
         "https://m.media-amazon.com/images/M/MV5BOGIxZjZlZjUtODM0OC00NDJlLWI5ZjItNDg3MGJmODVmZWNhXkEyXkFqcGc@._V1_SX300.jpg",
     runTime: "1 jam 50 menit",
     rating: 7.4,
-    votes: 8362,
+    votes: 8362,  
     watchlist: 6482,
   ),
   Movie(
@@ -110,7 +110,7 @@ var movieList = [
     id: "tt3794354",
     title: "Sonic the Hedgehog",
     plot:
-        "Berlindung di Bumi, ketika Sonic menggunakan kecepatan luar biasanya dan secara tidak sengaja memadamkan listrik di sebagian wilayah Amerika Serikat, ia menarik perhatian Dr. Robotnik dan harus menghentikannya dari memanfaatkan kekuatan uniknya untuk dominasi dunia...",
+        "Berdasarkan franchise video game blockbuster global dari Sega, **SONIC THE HEDGEHOG** menceritakan kisah landak tercepat di dunia saat ia beradaptasi dengan rumah barunya di Bumi. Dalam petualangan komedi aksi live-action ini, Sonic dan sahabat barunya, Tom (James Marsden), bekerja sama untuk melindungi planet dari jenius jahat Dr. Robotnik (Jim Carrey) dan rencananya untuk menguasai dunia.",
     genre: "Aksi, Petualangan, Komedi",
     director: "Jeff Fowler",
     rated: "R",
@@ -140,7 +140,7 @@ var movieList = [
     id: "tt8041270",
     title: "Jurassic World Dominion",
     plot:
-        "Empat tahun setelah kehancuran Isla Nublar, operatif Biosyn berusaha melacak Maisie Lockwood, sementara Dr. Ellie Sattler menyelidiki kawanan serangga raksasa yang direkayasa secara genetika.",
+        "Empat tahun setelah kehancuran Isla Nublar, dinosaurus kini hidup dan berburu bersama manusia di seluruh dunia. Keseimbangan yang rapuh ini akan membentuk ulang masa depan dan menentukan, sekali untuk selamanya, apakah manusia akan tetap menjadi predator puncak di planet yang kini mereka bagi dengan makhluk paling menakutkan dalam sejarah.",
     genre: "Aksi, Petualangan, Fiksi Ilmiah",
     director: "Colin Trevorrow",
     rated: "PG-13",
