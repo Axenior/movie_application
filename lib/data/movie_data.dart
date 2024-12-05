@@ -46,4 +46,109 @@ var movieList = [
     votes: 911838,
     watchlist: 74461,
   ),
+  Movie(
+    id: "tt3501632",
+    title: "Thor: Ragnarok",
+    plot:
+        "Dipenjara di sisi lain alam semesta, Thor yang perkasa (Chris Hemsworth) mendapati dirinya terlibat dalam pertarungan gladiator mematikan yang mempertemukannya dengan The Incredible Hulk (Mark Ruffalo), mantan sekutunya sekaligus sesama anggota Avengers. Upaya Thor untuk bertahan hidup membawanya dalam perlombaan melawan waktu untuk mencegah Hela yang maha kuasa (Cate Blanchett) menghancurkan dunia asalnya dan peradaban Asgard.",
+    genre: "Aksi, Petualangan, Komedi",
+    director: "Taika Waititi",
+    rated: "PG-13",
+    poster:
+        "https://m.media-amazon.com/images/M/MV5BMjMyNDkzMzI1OF5BMl5BanBnXkFtZTgwODcxODg5MjI@._V1_SX300.jpg",
+    runTime: "2 jam 10 menit",
+    rating: 7.9,
+    votes: 837240,
+    watchlist: 641282,
+  ),
+  Movie(
+    id: "tt16428256",
+    title: "Suzume",
+    plot:
+        "Suzume, seorang gadis berusia 17 tahun yang tinggal di kota kecil yang tenang di Kyushu, bertemu dengan seorang pemuda yang sedang dalam perjalanan 'mencari pintu-pintu.' Suzume mengikutinya hingga ke reruntuhan sebuah bangunan tua di pegunungan dan menemukan sebuah pintu yang berdiri sendiri, tampak tidak tersentuh seolah-olah hanya pintu itu yang selamat dari kehancuran. Suzume merasa tertarik oleh kekuatan tak terlihat dan meraih pintu tersebut. Tak lama kemudian, pintu-pintu di seluruh Jepang mulai terbuka satu per satu. Pintu-pintu yang telah terbuka harus segera ditutup untuk menghalau bencana yang mengintai di sisi lain. Tempat-tempat yang Suzume jelajahi dipenuhi dengan keindahan bintang-bintang, matahari terbenam, dan langit pagi, di mana semua waktu dalam sehari tampak menyatu menjadi satu.",
+    genre: "Animasi, Aksi, Petualangan",
+    director: "Makoto Shinkai",
+    rated: "PG",
+    poster:
+        "https://m.media-amazon.com/images/M/MV5BODhkNDhmNzktODFmMC00NDZiLWEzN2UtY2YwYzgzYTVlMWZmXkEyXkFqcGc@._V1_SX300.jpg",
+    runTime: "2 jam 2 menit",
+    rating: 7.6,
+    votes: 47880,
+    watchlist: 64811,
+  ),
+  Movie(
+    id: "tt22868844",
+    title: "Black Clover: Sword of the Wizard King",
+    plot:
+        "Di dunia di mana sihir adalah segalanya, Asta, seorang anak yang lahir tanpa sihir, bercita-cita menjadi 'Raja Penyihir' untuk mengatasi rintangan, membuktikan kekuatannya, dan menepati janjinya kepada teman-temannya.",
+    genre: "Animasi, Aksi, Petualangan",
+    director: "Ayataka Tanemura",
+    rated: "TV-14",
+    poster:
+        "https://m.media-amazon.com/images/M/MV5BOGIxZjZlZjUtODM0OC00NDJlLWI5ZjItNDg3MGJmODVmZWNhXkEyXkFqcGc@._V1_SX300.jpg",
+    runTime: "1 jam 50 menit",
+    rating: 7.4,
+    votes: 8362,  
+    watchlist: 6482,
+  ),
+  Movie(
+    id: "tt6263850",
+    title: "Deadpool & Wolverine",
+    plot:
+        "Deadpool ditawarkan tempat di Marvel Cinematic Universe oleh Time Variance Authority, tetapi ia malah merekrut varian Wolverine untuk menyelamatkan semestanya dari kehancuran.",
+    genre: "Aksi, Petualangan, Komedi",
+    director: "Shawn Levy",
+    rated: "R",
+    poster:
+        "https://m.media-amazon.com/images/M/MV5BZTk5ODY0MmQtMzA3Ni00NGY1LThiYzItZThiNjFiNDM4MTM3XkEyXkFqcGc@._V1_SX300.jpg",
+    runTime: "2 jam 8 menit",
+    rating: 7.8,
+    votes: 403822,
+    watchlist: 389027 ,
+  ),
+  Movie(
+    id: "tt3794354",
+    title: "Sonic the Hedgehog",
+    plot:
+        "Berdasarkan franchise video game blockbuster global dari Sega, **SONIC THE HEDGEHOG** menceritakan kisah landak tercepat di dunia saat ia beradaptasi dengan rumah barunya di Bumi. Dalam petualangan komedi aksi live-action ini, Sonic dan sahabat barunya, Tom (James Marsden), bekerja sama untuk melindungi planet dari jenius jahat Dr. Robotnik (Jim Carrey) dan rencananya untuk menguasai dunia.",
+    genre: "Aksi, Petualangan, Komedi",
+    director: "Jeff Fowler",
+    rated: "R",
+    poster:
+        "https://m.media-amazon.com/images/M/MV5BYTg2Yjc5MzItNzVmMi00MTllLWI2MDQtOTYyOWNjYWIxNzEzXkEyXkFqcGc@._V1_SX300.jpg",
+    runTime: "1 jam 39 menit",
+    rating: 6.5,
+    votes: 166356,
+    watchlist: 18220 ,
+  ),
+  Movie(
+    id: "tt16366836",
+    title: "Venom: The Last Dance",
+    plot:
+        "Eddie dan Venom, dalam pelarian, menghadapi pengejaran dari kedua dunia. Ketika keadaan semakin mendesak, mereka terpaksa membuat pilihan yang menyayat hati yang bisa mengakhiri kemitraan simbiosis mereka.",
+    genre: "Aksi, Petualangan, Fiksi Ilmiah",
+    director: "Kelly Marcel",
+    rated: "PG-13",
+    poster:
+        "https://m.media-amazon.com/images/M/MV5BZDMyYWU4NzItZDY0MC00ODE2LTkyYTMtMzNkNDdmYmFhZDg0XkEyXkFqcGc@._V1_SX300.jpg",
+    runTime: "1 jam 50 menit",
+    rating: 6.2,
+    votes: 42838,
+    watchlist: 164882 ,
+  ),
+  Movie(
+    id: "tt8041270",
+    title: "Jurassic World Dominion",
+    plot:
+        "Empat tahun setelah kehancuran Isla Nublar, dinosaurus kini hidup dan berburu bersama manusia di seluruh dunia. Keseimbangan yang rapuh ini akan membentuk ulang masa depan dan menentukan, sekali untuk selamanya, apakah manusia akan tetap menjadi predator puncak di planet yang kini mereka bagi dengan makhluk paling menakutkan dalam sejarah.",
+    genre: "Aksi, Petualangan, Fiksi Ilmiah",
+    director: "Colin Trevorrow",
+    rated: "PG-13",
+    poster:
+        "https://m.media-amazon.com/images/M/MV5BZGExMWU2NWMtNzczYi00NjQ4LTk2YzctZGZkYmRmMDdhMjllXkEyXkFqcGc@._V1_SX300.jpg",
+    runTime: "2 jam 27 menit",
+    rating: 5.6,
+    votes: 215417,
+    watchlist: 207240 ,
+  ),
 ];
