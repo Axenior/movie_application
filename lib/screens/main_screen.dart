@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:movie_application/screens/home_screen.dart';
 import 'package:movie_application/screens/profile_screen.dart';
+import 'package:movie_application/screens/search_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -14,6 +15,7 @@ class _MainScreenState extends State<MainScreen> {
 
   List<Widget> body = const [
     HomeScreen(),
+    SearchScreen(),
     ProfileScreen(),
   ];
 
@@ -33,6 +35,10 @@ class _MainScreenState extends State<MainScreen> {
           BottomNavigationBarItem(
             icon: Icon(Icons.home_outlined),
             label: "Home",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.search_outlined),
+            label: "Search",
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person_outlined),
