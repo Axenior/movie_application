@@ -54,7 +54,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    const SizedBox(height: 40), 
+                    const SizedBox(height: 40),
                     const Text(
                       "LOGIN",
                       style: TextStyle(
@@ -87,7 +87,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         suffixIcon: IconButton(
                           icon: Icon(
-                            _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                            _obscurePassword
+                                ? Icons.visibility_off
+                                : Icons.visibility,
                           ),
                           onPressed: () {
                             setState(() {
@@ -121,7 +123,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               await SharedPreferences.getInstance();
                           await prefs.setBool('isLoggedIn', true);
                           await prefs.setString('email', email);
-                          Navigator.pushReplacementNamed(context, '/home');
+                          Navigator.pushReplacementNamed(context, '/main');
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
@@ -185,6 +187,3 @@ class _LoginScreenState extends State<LoginScreen> {
     return false;
   }
 }
-
-
-

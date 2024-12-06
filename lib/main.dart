@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:movie_application/models/movie.dart';
 import 'package:movie_application/screens/login_screen.dart';
 import 'package:movie_application/screens/main_screen.dart';
 import 'package:movie_application/screens/detail_screen.dart';
 import 'package:movie_application/screens/home_screen.dart';
 import 'package:movie_application/screens/list_movie_screen.dart';
-import 'package:movie_application/screens/profile_screen.dart';
 import 'package:movie_application/screens/watchlist_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -32,7 +30,7 @@ class MainApp extends StatelessWidget {
   // MainApp({super.key});
 
   Widget build(BuildContext context) {
-    return GetMaterialApp(
+    return MaterialApp(
       title: "Movie App",
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -66,9 +64,9 @@ class MainApp extends StatelessWidget {
           backgroundColor: Color.fromARGB(255, 255, 255, 255),
         ),
       ),
-      home: isLoggedIn ? const HomeScreen() : const LoginScreen(),
+      home: isLoggedIn ? const MainScreen() : const LoginScreen(),
       routes: {
-        '/login' : (context) => const LoginScreen(),
+        '/login': (context) => const LoginScreen(),
         '/home': (context) => const HomeScreen(),
         '/main': (context) => const MainScreen(),
         '/detail-movie': (context) {
