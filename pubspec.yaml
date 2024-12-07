@@ -26,3 +26,4 @@ flutter:
 
   assets:
     - images/bg_login.jpg
+    - images/profile.jpg

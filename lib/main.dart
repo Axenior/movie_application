@@ -6,6 +6,7 @@ import 'package:movie_application/screens/detail_screen.dart';
 import 'package:movie_application/screens/home_screen.dart';
 import 'package:movie_application/screens/list_movie_screen.dart';
 import 'package:movie_application/screens/watchlist_screen.dart';
+import 'package:movie_application/screens/profile_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
