@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:movie_application/models/movie.dart';
 import 'package:movie_application/screens/login_screen.dart';
+import 'package:movie_application/screens/register_screen.dart';
 import 'package:movie_application/screens/main_screen.dart';
 import 'package:movie_application/screens/detail_screen.dart';
 import 'package:movie_application/screens/home_screen.dart';
@@ -67,6 +68,7 @@ class MainApp extends StatelessWidget {
       home: isLoggedIn ? const MainScreen() : const LoginScreen(),
       routes: {
         '/login': (context) => const LoginScreen(),
+        '/register': (context) => const RegisterScreen(),
         '/home': (context) => const HomeScreen(),
         '/main': (context) => const MainScreen(),
         '/detail-movie': (context) {
