@@ -1,20 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:movie_application/screens/register_screen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:movie_application/models/user.dart';
 import 'package:movie_application/data/user_data.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+
+
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _RegisterScreenState extends State<RegisterScreen> {
+  final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
   bool _obscurePassword = true;
+  bool _obscureConfirmPassword = true;
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +42,7 @@ class _LoginScreenState extends State<LoginScreen> {
           const Padding(
             padding: EdgeInsets.only(top: 16.0),
             child: Text(
-              "Selamat Datang di CineMate",
+              "Buat Akun Baru",
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
@@ -57,7 +61,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   children: [
                     const SizedBox(height: 40),
                     const Text(
-                      "LOGIN",
+                      "DAFTAR",
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -65,6 +69,17 @@ class _LoginScreenState extends State<LoginScreen> {
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 40),
+                    TextField(
+                      controller: _usernameController,
+                      decoration: const InputDecoration(
+                        labelText: "USENAME",
+                        hintText: "Nama Pengguna Anda",
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(24)),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
                     TextField(
                       controller: _emailController,
                       decoration: const InputDecoration(
@@ -100,38 +115,35 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 8),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: TextButton(
-                        onPressed: () {
-                          // Onpressed ny blm dibuat
-                        },
-                        child: const Text(
-                          "Lupa password?",
-                          style: TextStyle(color: Colors.blue),
+                    const SizedBox(height: 16),
+                    TextField(
+                      controller: _confirmPasswordController,
+                      obscureText: _obscureConfirmPassword,
+                      decoration: InputDecoration(
+                        labelText: "KONFIRMASI PASSWORD",
+                        hintText: "Masukkan Password Lagi",
+                        border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(24)),
+                        ),
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _obscureConfirmPassword
+                                ? Icons.visibility_off
+                                : Icons.visibility,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _obscureConfirmPassword =
+                                  !_obscureConfirmPassword;
+                            });
+                          },
                         ),
                       ),
                     ),
                     const SizedBox(height: 16),
                     ElevatedButton(
-                      onPressed: () async {
-                        String email = _emailController.text;
-                        String password = _passwordController.text;
-
-                        if (_validateLogin(email, password)) {
-                          SharedPreferences prefs =
-                              await SharedPreferences.getInstance();
-                          await prefs.setBool('isLoggedIn', true);
-                          await prefs.setString('email', email);
-                          Navigator.pushReplacementNamed(context, '/main');
-                        } else {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Email atau password salah'),
-                            ),
-                          );
-                        }
+                      onPressed: () {
+                        _registerUser();
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blue.shade100,
@@ -141,7 +153,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         padding: const EdgeInsets.symmetric(vertical: 16),
                       ),
                       child: const Text(
-                        "Login",
+                        "Daftar",
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -153,17 +165,13 @@ class _LoginScreenState extends State<LoginScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text("Belum punya akun? "),
+                        const Text("Sudah punya akun? "),
                         GestureDetector(
                           onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => const RegisterScreen()),
-                              );
-                            // ini jg blm ku buat ontap ny (Navigator.pushNamed(context, '/register');)
+                            Navigator.pop(context);
                           },
                           child: const Text(
-                            "Daftar sekarang",
+                            "Masuk",
                             style: TextStyle(
                               color: Colors.blue,
                               fontWeight: FontWeight.bold,
@@ -183,12 +191,35 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  bool _validateLogin(String email, String password) {
+  void _registerUser() {
+    String username = _usernameController.text;
+    String email = _emailController.text;
+    String password = _passwordController.text;
+    String confirmPassword = _confirmPasswordController.text;
+
+    if (username.isEmpty || email.isEmpty || password.isEmpty || confirmPassword.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Semua field harus diisi')),
+      );
+      return;
+    }
+
+    if (password != confirmPassword) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Password dan Konfirmasi Password tidak cocok')),
+      );
+      return;
+    }
+
     for (User user in userList) {
-      if (user.email == email && user.password == password) {
-        return true;
+      if (user.email == email) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Email sudah digunakan')),
+        );
+        return;
       }
     }
-    return false;
+
+    Navigator.pop(context);
   }
 }
