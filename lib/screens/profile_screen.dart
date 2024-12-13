@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:movie_application/screens/login_screen.dart'; // Ganti dengan path layar login Anda
+import 'package:movie_application/screens/login_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -68,7 +68,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
     // Setelah logout, arahkan pengguna ke layar login
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => const LoginScreen()), // Pastikan Anda memiliki LoginScreen
+      MaterialPageRoute(
+          builder: (context) =>
+              const LoginScreen()), // Pastikan Anda memiliki LoginScreen
     );
   }
 

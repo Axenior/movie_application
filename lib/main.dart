@@ -7,7 +7,6 @@ import 'package:movie_application/screens/detail_screen.dart';
 import 'package:movie_application/screens/home_screen.dart';
 import 'package:movie_application/screens/list_movie_screen.dart';
 import 'package:movie_application/screens/watchlist_screen.dart';
-import 'package:movie_application/screens/profile_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
@@ -31,39 +30,19 @@ class MainApp extends StatelessWidget {
   const MainApp({super.key, required this.isLoggedIn});
   // MainApp({super.key});
 
+  @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: "Movie App",
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        textTheme: const TextTheme(
-          titleMedium: TextStyle(
-            color: Color.fromARGB(255, 42, 41, 52),
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-          ),
-          titleLarge: TextStyle(
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Color.fromARGB(255, 255, 255, 255),
+          titleTextStyle: TextStyle(
             color: Color.fromARGB(255, 42, 41, 52),
             fontSize: 18,
             fontWeight: FontWeight.w900,
           ),
-          labelSmall: TextStyle(
-            color: Color.fromARGB(255, 11, 3, 50),
-            fontWeight: FontWeight.bold,
-            fontSize: 12,
-          ),
-          bodySmall: TextStyle(
-            color: Color.fromARGB(255, 11, 3, 50),
-            fontSize: 12,
-          ),
-        ),
-        colorScheme: const ColorScheme.light(
-          primary: Color.fromARGB(255, 62, 58, 78),
-          secondary: Color.fromARGB(255, 97, 96, 96),
-          onPrimary: Color.fromARGB(255, 18, 93, 178),
-        ),
-        appBarTheme: const AppBarTheme(
-          backgroundColor: Color.fromARGB(255, 255, 255, 255),
         ),
       ),
       home: isLoggedIn ? const MainScreen() : const LoginScreen(),

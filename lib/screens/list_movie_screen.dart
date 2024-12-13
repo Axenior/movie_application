@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:movie_application/data/movie_data.dart';
-import 'package:movie_application/models/movie.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ListMovieScreen extends StatefulWidget {
   const ListMovieScreen({super.key});
@@ -12,7 +12,24 @@ class ListMovieScreen extends StatefulWidget {
 }
 
 class _ListMovieScreenState extends State<ListMovieScreen> {
-  List<Movie> data = movieList;
+  List<String> watchlistId = [];
+
+  Future<void> _loadWatchlist() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? email = prefs.getString('email');
+
+    if (email != null) {
+      watchlistId = prefs.getStringList('watchlist-$email') ?? [];
+    }
+
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadWatchlist();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +51,7 @@ class _ListMovieScreenState extends State<ListMovieScreen> {
                 child: GridView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount: data.length,
+                  itemCount: movieList.length,
                   gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                     maxCrossAxisExtent: 200,
                     crossAxisSpacing: 10,
@@ -46,7 +63,13 @@ class _ListMovieScreenState extends State<ListMovieScreen> {
                       onTap: () {
                         Navigator.pushNamed(context, '/detail-movie',
                                 arguments: movieList[index])
-                            .then((value) => setState(() {}));
+                            .then(
+                          (value) => setState(
+                            () {
+                              _loadWatchlist();
+                            },
+                          ),
+                        );
                       },
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -59,7 +82,7 @@ class _ListMovieScreenState extends State<ListMovieScreen> {
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10),
                                   child: CachedNetworkImage(
-                                    imageUrl: data[index].poster,
+                                    imageUrl: movieList[index].poster,
                                     fit: BoxFit.cover,
                                     errorWidget: (context, url, error) =>
                                         const Icon(Icons.error),
@@ -68,14 +91,11 @@ class _ListMovieScreenState extends State<ListMovieScreen> {
                               ),
                               GestureDetector(
                                 onTap: () {
-                                  setState(() {
-                                    data[index].isWatchlist =
-                                        !data[index].isWatchlist;
-                                    data[index].watchlist =
-                                        data[index].isWatchlist
-                                            ? data[index].watchlist + 1
-                                            : data[index].watchlist - 1;
-                                  });
+                                  setState(
+                                    () {
+                                      _toggleWatchlist(movieList[index].id);
+                                    },
+                                  );
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.all(5.0),
@@ -90,7 +110,8 @@ class _ListMovieScreenState extends State<ListMovieScreen> {
                                       padding: const EdgeInsets.all(5.0),
                                       child: Icon(
                                         Icons.favorite,
-                                        color: data[index].isWatchlist
+                                        color: watchlistId
+                                                .contains(movieList[index].id)
                                             ? Colors.pink
                                             : Colors.white,
                                       ),
@@ -102,7 +123,7 @@ class _ListMovieScreenState extends State<ListMovieScreen> {
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            data[index].title,
+                            movieList[index].title,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: const TextStyle(
@@ -118,7 +139,7 @@ class _ListMovieScreenState extends State<ListMovieScreen> {
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 4),
                                 child: Text(
-                                  data[index].rated,
+                                  movieList[index].rated,
                                   style: TextStyle(
                                     color: Colors.grey.shade600,
                                     fontSize: 12,
@@ -129,7 +150,7 @@ class _ListMovieScreenState extends State<ListMovieScreen> {
                               const SizedBox(width: 8),
                               Expanded(
                                 child: Text(
-                                  data[index].genre,
+                                  movieList[index].genre,
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
@@ -145,7 +166,7 @@ class _ListMovieScreenState extends State<ListMovieScreen> {
                           Row(
                             children: [
                               RatingBarIndicator(
-                                rating: data[index].rating / 2,
+                                rating: movieList[index].rating / 2,
                                 direction: Axis.horizontal,
                                 itemCount: 5,
                                 itemSize: 18,
@@ -156,7 +177,7 @@ class _ListMovieScreenState extends State<ListMovieScreen> {
                               ),
                               const SizedBox(width: 4),
                               Text(
-                                data[index].rating.toStringAsFixed(1),
+                                movieList[index].rating.toStringAsFixed(1),
                                 style: const TextStyle(
                                   fontSize: 12,
                                   color: Colors.amber,
@@ -176,5 +197,23 @@ class _ListMovieScreenState extends State<ListMovieScreen> {
         ),
       ),
     );
+  }
+
+  void _toggleWatchlist(String movieId) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? email = prefs.getString('email'); // Ensure 'email' is available.
+
+    if (email != null) {
+      List<String> watchlist = prefs.getStringList('watchlist-$email') ?? [];
+
+      if (!watchlist.contains(movieId)) {
+        watchlist.add(movieId);
+      } else {
+        watchlist.remove(movieId);
+      }
+
+      await prefs.setStringList('watchlist-$email', watchlist);
+      _loadWatchlist();
+    }
   }
 }

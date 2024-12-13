@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:movie_application/data/movie_data.dart';
 import 'package:movie_application/models/movie.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -14,8 +15,27 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   List<Movie> data = [];
   final SearchController _controller = SearchController();
-  String _searchQuery = '';
+  // String _searchQuery = '';
   bool isSubmited = false;
+
+  List<String> watchlistId = [];
+
+  Future<void> _loadWatchlist() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? email = prefs.getString('email');
+
+    if (email != null) {
+      watchlistId = prefs.getStringList('watchlist-$email') ?? [];
+    }
+
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadWatchlist();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,10 +45,9 @@ class _SearchScreenState extends State<SearchScreen> {
         actions: [
           IconButton(
             onPressed: () {},
-            icon: Icon(
+            icon: const Icon(
               Icons.notifications,
               size: 25,
-              color: Theme.of(context).colorScheme.primary,
             ),
             padding: EdgeInsets.zero,
           ),
@@ -103,7 +122,13 @@ class _SearchScreenState extends State<SearchScreen> {
                       onTap: () {
                         Navigator.pushNamed(context, '/detail-movie',
                                 arguments: data[index])
-                            .then((value) => setState(() {}));
+                            .then(
+                          (value) => setState(
+                            () {
+                              _loadWatchlist();
+                            },
+                          ),
+                        );
                       },
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -126,12 +151,7 @@ class _SearchScreenState extends State<SearchScreen> {
                               GestureDetector(
                                 onTap: () {
                                   setState(() {
-                                    data[index].isWatchlist =
-                                        !data[index].isWatchlist;
-                                    data[index].watchlist =
-                                        data[index].isWatchlist
-                                            ? data[index].watchlist + 1
-                                            : data[index].watchlist - 1;
+                                    _toggleWatchlist(data[index].id);
                                   });
                                 },
                                 child: Padding(
@@ -147,9 +167,10 @@ class _SearchScreenState extends State<SearchScreen> {
                                       padding: const EdgeInsets.all(5.0),
                                       child: Icon(
                                         Icons.favorite,
-                                        color: data[index].isWatchlist
-                                            ? Colors.pink
-                                            : Colors.white,
+                                        color:
+                                            watchlistId.contains(data[index].id)
+                                                ? Colors.pink
+                                                : Colors.white,
                                       ),
                                     ),
                                   ),
@@ -258,5 +279,23 @@ class _SearchScreenState extends State<SearchScreen> {
     setState(() {
       isSubmited = true;
     });
+  }
+
+  void _toggleWatchlist(String movieId) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? email = prefs.getString('email'); // Ensure 'email' is available.
+
+    if (email != null) {
+      List<String> watchlist = prefs.getStringList('watchlist-$email') ?? [];
+
+      if (!watchlist.contains(movieId)) {
+        watchlist.add(movieId);
+      } else {
+        watchlist.remove(movieId);
+      }
+
+      await prefs.setStringList('watchlist-$email', watchlist);
+      _loadWatchlist();
+    }
   }
 }

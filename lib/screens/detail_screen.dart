@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_application/models/movie.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DetailScreen extends StatefulWidget {
   final Movie movie;
@@ -12,6 +13,25 @@ class DetailScreen extends StatefulWidget {
 }
 
 class _DetailScreenState extends State<DetailScreen> {
+  List<String> watchlistId = [];
+
+  Future<void> _loadWatchlist() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? email = prefs.getString('email');
+
+    if (email != null) {
+      watchlistId = prefs.getStringList('watchlist-$email') ?? [];
+    }
+
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadWatchlist();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,7 +80,11 @@ class _DetailScreenState extends State<DetailScreen> {
                         children: [
                           Text(
                             widget.movie.title,
-                            style: Theme.of(context).textTheme.titleMedium,
+                            style: const TextStyle(
+                              color: Color.fromARGB(255, 42, 41, 52),
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                           const SizedBox(height: 8),
                           Row(
@@ -237,11 +261,7 @@ class _DetailScreenState extends State<DetailScreen> {
                         onTap: () {
                           setState(
                             () {
-                              widget.movie.isWatchlist =
-                                  !widget.movie.isWatchlist;
-                              widget.movie.watchlist = widget.movie.isWatchlist
-                                  ? widget.movie.watchlist + 1
-                                  : widget.movie.watchlist - 1;
+                              _toggleWatchlist(widget.movie.id);
                             },
                           );
                         },
@@ -252,7 +272,7 @@ class _DetailScreenState extends State<DetailScreen> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Icon(
-                                  widget.movie.isWatchlist
+                                  watchlistId.contains(widget.movie.id)
                                       ? Icons.favorite
                                       : Icons.favorite_outline,
                                   color: Colors.pink,
@@ -288,18 +308,25 @@ class _DetailScreenState extends State<DetailScreen> {
               ),
               const Divider(thickness: 0.2),
               // Sinopsis
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10),
                 child: Text(
                   "Sinopsis",
-                  style: Theme.of(context).textTheme.titleMedium,
+                  style: TextStyle(
+                    color: Color.fromARGB(255, 42, 41, 52),
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.all(10),
                 child: Text(
                   widget.movie.plot,
-                  style: Theme.of(context).textTheme.bodySmall,
+                  style: const TextStyle(
+                    color: Color.fromARGB(255, 11, 3, 50),
+                    fontSize: 12,
+                  ),
                 ),
               ),
             ],
@@ -307,5 +334,24 @@ class _DetailScreenState extends State<DetailScreen> {
         ),
       ),
     );
+  }
+
+  void _toggleWatchlist(String movieId) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? email = prefs.getString('email');
+
+    if (email != null) {
+      List<String> updatedWatchlist =
+          prefs.getStringList('watchlist-$email') ?? [];
+
+      if (!updatedWatchlist.contains(movieId)) {
+        updatedWatchlist.add(movieId);
+      } else {
+        updatedWatchlist.remove(movieId);
+      }
+
+      await prefs.setStringList('watchlist-$email', updatedWatchlist);
+      _loadWatchlist(); // Reload the updated watchlist and movies
+    }
   }
 }

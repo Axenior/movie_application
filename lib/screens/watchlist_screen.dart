@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:movie_application/models/movie.dart';
 import 'package:movie_application/data/movie_data.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class WatchlistScreen extends StatefulWidget {
   const WatchlistScreen({super.key});
@@ -12,8 +13,27 @@ class WatchlistScreen extends StatefulWidget {
 }
 
 class _WatchlistScreenState extends State<WatchlistScreen> {
-  List<Movie> movieWatchlist =
-      movieList.where((movie) => movie.isWatchlist).toList();
+  List<Movie> _movieWatchlist = [];
+  List<String> watchlistId = [];
+
+  Future<void> _loadWatchlist() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? email = prefs.getString('email');
+
+    if (email != null) {
+      watchlistId = prefs.getStringList('watchlist-$email') ?? [];
+      _movieWatchlist =
+          movieList.where((movie) => watchlistId.contains(movie.id)).toList();
+    }
+
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadWatchlist();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,10 +45,10 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
           child: Divider(thickness: 0.2),
         ),
       ),
-      body: movieWatchlist.isEmpty
+      body: _movieWatchlist.isEmpty
           ? Center(
               child: Text(
-                "Kamu belum memiliki movie favoritemu",
+                "Kamu belum memiliki movie favorit.",
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
@@ -43,7 +63,7 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
                   child: GridView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    itemCount: movieWatchlist.length,
+                    itemCount: _movieWatchlist.length,
                     gridDelegate:
                         const SliverGridDelegateWithMaxCrossAxisExtent(
                       maxCrossAxisExtent: 200,
@@ -55,8 +75,14 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
                       return GestureDetector(
                         onTap: () {
                           Navigator.pushNamed(context, '/detail-movie',
-                                  arguments: movieWatchlist[index])
-                              .then((value) => setState(() {}));
+                                  arguments: _movieWatchlist[index])
+                              .then(
+                            (value) => setState(
+                              () {
+                                _loadWatchlist();
+                              },
+                            ),
+                          );
                         },
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -69,7 +95,7 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(10),
                                     child: CachedNetworkImage(
-                                      imageUrl: movieWatchlist[index].poster,
+                                      imageUrl: _movieWatchlist[index].poster,
                                       fit: BoxFit.cover,
                                       errorWidget: (context, url, error) =>
                                           const Icon(Icons.error),
@@ -78,19 +104,10 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
                                 ),
                                 GestureDetector(
                                   onTap: () {
-                                    setState(
-                                      () {
-                                        movieWatchlist[index].isWatchlist =
-                                            !movieWatchlist[index].isWatchlist;
-                                        movieWatchlist[index]
-                                            .watchlist = movieWatchlist[index]
-                                                .isWatchlist
-                                            ? movieWatchlist[index].watchlist +
-                                                1
-                                            : movieWatchlist[index].watchlist -
-                                                1;
-                                      },
-                                    );
+                                    setState(() {
+                                      _toggleWatchlist(
+                                          _movieWatchlist[index].id);
+                                    });
                                   },
                                   child: Padding(
                                     padding: const EdgeInsets.all(5.0),
@@ -105,10 +122,10 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
                                         padding: const EdgeInsets.all(5.0),
                                         child: Icon(
                                           Icons.favorite,
-                                          color:
-                                              movieWatchlist[index].isWatchlist
-                                                  ? Colors.pink
-                                                  : Colors.white,
+                                          color: watchlistId.contains(
+                                                  _movieWatchlist[index].id)
+                                              ? Colors.pink
+                                              : Colors.white,
                                         ),
                                       ),
                                     ),
@@ -118,7 +135,7 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
                             ),
                             const SizedBox(height: 8),
                             Text(
-                              movieWatchlist[index].title,
+                              _movieWatchlist[index].title,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: const TextStyle(
@@ -134,7 +151,7 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
                                   padding:
                                       const EdgeInsets.symmetric(horizontal: 4),
                                   child: Text(
-                                    movieWatchlist[index].rated,
+                                    _movieWatchlist[index].rated,
                                     style: TextStyle(
                                       color: Colors.grey.shade600,
                                       fontSize: 12,
@@ -145,7 +162,7 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
                                 const SizedBox(width: 8),
                                 Expanded(
                                   child: Text(
-                                    movieWatchlist[index].genre,
+                                    _movieWatchlist[index].genre,
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
@@ -161,7 +178,7 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
                             Row(
                               children: [
                                 RatingBarIndicator(
-                                  rating: movieWatchlist[index].rating / 2,
+                                  rating: _movieWatchlist[index].rating / 2,
                                   direction: Axis.horizontal,
                                   itemCount: 5,
                                   itemSize: 12,
@@ -172,7 +189,7 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
                                 ),
                                 const SizedBox(width: 4),
                                 Text(
-                                  movieWatchlist[index]
+                                  _movieWatchlist[index]
                                       .rating
                                       .toStringAsFixed(1),
                                   style: const TextStyle(
@@ -192,5 +209,24 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
               ),
             ),
     );
+  }
+
+  void _toggleWatchlist(String movieId) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? email = prefs.getString('email');
+
+    if (email != null) {
+      List<String> updatedWatchlist =
+          prefs.getStringList('watchlist-$email') ?? [];
+
+      if (!updatedWatchlist.contains(movieId)) {
+        updatedWatchlist.add(movieId);
+      } else {
+        updatedWatchlist.remove(movieId);
+      }
+
+      await prefs.setStringList('watchlist-$email', updatedWatchlist);
+      _loadWatchlist(); // Reload the updated watchlist and movies
+    }
   }
 }
