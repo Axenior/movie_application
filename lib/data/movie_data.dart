@@ -151,4 +151,154 @@ var movieList = [
     votes: 215417,
     watchlist: 207240 ,
   ),
+  Movie(
+    id: "tt29268110",
+    title: "Smile 2",
+    plot:
+        "Akan memulai tur dunia, sensasi pop global Skye Riley mulai mengalami peristiwa-peristiwa yang semakin menakutkan dan tidak dapat dijelaskan. Terhimpit oleh kengerian yang terus meningkat dan tekanan ketenaran, Skye terpaksa menghadapi masa lalunya.",
+    genre: "Horor, Misteri, Thriller",
+    director: "Parker Finn",
+    rated: "R",
+    poster:
+        "https://m.media-amazon.com/images/M/MV5BYTg5OTMyMGMtYzMwNC00NDMyLWE0OGUtMTQ1ODcwM2FjOTM4XkEyXkFqcGc@._V1_SX300.jpg",
+    runTime: "2 jam 7 menit",
+    rating: 6.9,
+    votes: 51499,
+    watchlist: 91402 ,
+  ),
+  Movie(
+    id: "tt0099785",
+    title: "Home Alone",
+    plot:
+        "Saat musim Natal tiba, keluarga McCallister sedang bersiap-siap untuk berlibur ke Paris, Prancis. Namun, si bungsu, Kevin (Macaulay Culkin), terlibat pertengkaran dengan kakaknya, Buzz (Devin Ratray), dan dihukum untuk tinggal di kamarnya yang berada di lantai tiga rumah mereka. Keesokan paginya, dalam kepanikan mengejar waktu untuk sampai di bandara, keluarga McCallister tanpa sadar meninggalkan Kevin, yang kini mendapati dirinya sendirian di rumah. Awalnya, berada di rumah sendirian terasa menyenangkan bagi Kevin. Ia menikmati pizza seorang diri, melompat-lompat di atas ranjang orang tuanya, dan membuat kekacauan. Namun, kesenangan itu berubah ketika Kevin mengetahui ada dua pencuri, Harry (Joe Pesci) dan Marv (Daniel Stern), yang berencana merampok rumahnya pada Malam Natal. Dengan cepat, Kevin menyusun rencana dan memasang jebakan-jebakan buatan sendiri untuk melindungi rumahnya, menghentikan para pencuri, dan membawa mereka ke tangan keadilan.",
+    genre: "Komedi, Keluarga",
+    director: "Chris Colombus",
+    rated: "PG",
+    poster:
+        "https://m.media-amazon.com/images/M/MV5BNzNmNmQ2ZDEtMTc1MS00NjNiLThlMGUtZmQxNTg1Nzg5NWMzXkEyXkFqcGc@._V1_SX300.jpg",
+    runTime: "1 jam 43 menit",
+    rating: 7.7,
+    votes: 670153,
+    watchlist: 364822 ,
+  ),
+  Movie(
+    id: "tt18412256",
+    title: "Alien: Romulus",
+    plot:
+        "Saat menjelajahi bagian terdalam dari stasiun luar angkasa yang terbengkalai, sekelompok kolonis muda luar angkasa berhadapan langsung dengan makhluk hidup paling menakutkan di alam semesta.",
+    genre: "Horor, Fiksi Ilmiah, Thriller",
+    director: "Fede Alvarez",
+    rated: "R",
+    poster:
+        "https://m.media-amazon.com/images/M/MV5BMDU0NjcwOGQtNjNjOS00NzQ3LWIwM2YtYWVmODZjMzQzN2ExXkEyXkFqcGc@._V1_SX300.jpg",
+    runTime: "1 jam 59 menit",
+    rating: 7.2,
+    votes: 168913,
+    watchlist: 199229 ,
+  ),
+  Movie(
+    id: "tt12343534",
+    title: "Jujutsu Kaisen",
+    plot:
+        "Yuji Itadori, seorang remaja berhati baik, bergabung dengan Klub Okultisme di sekolahnya untuk bersenang-senang, tetapi kemudian menemukan bahwa anggotanya adalah para penyihir yang mampu memanipulasi energi antara makhluk untuk keperluan mereka sendiri. Ia mendengar tentang jimat terkutuk—jari Sukuna, seorang iblis—yang menjadi target makhluk terkutuk lainnya. Demi melindungi teman-temannya, Yuji memakan jari tersebut dan akhirnya menjadi wadah Sukuna. Namun, Yuji menyadari bahwa ia mewarisi kekuatan sihir dan mampu mengendalikannya tanpa gangguan dari Sukuna. Ia kemudian bergabung dengan Tokyo Metropolitan Magic Technical College untuk melacak dan mengonsumsi semua jari Sukuna, yang akan memungkinkan ritual eksorsisme penuh untuk membebaskannya dari kutukan.",
+    genre: "Animasi, Aksi, Petualangan",
+    director: "N/A",
+    rated: "TV-MA",
+    poster:
+        "https://m.media-amazon.com/images/M/MV5BNmI1MmYxNWQtY2E5NC00ZTlmLWIzZGEtNzM1YmE3NDA5NzhjXkEyXkFqcGc@._V1_SX300.jpg",
+    runTime: "24 menit",
+    rating: 8.5,
+    votes: 134032,
+    watchlist: 135642 ,
+  ),
+  Movie(
+    id: "tt9335498",
+    title: "Demon Slayer: Kimetsu no Yaiba",
+    plot:
+        "Sejak zaman dahulu, umat manusia telah mengetahui keberadaan monster pemakan daging manusia yang mengintai dalam kegelapan, siap memangsa jiwa-jiwa malang yang mengabaikan rumor keberadaan mereka. Namun, rumor itu juga menyebutkan tentang korps elit pemburu iblis, para pembunuh terampil yang ditugaskan untuk membasmi para iblis. Demon Slayer berfokus pada Tanjirou Kamado, seorang pemuda yang masih sangat muda tetapi menjadi satu-satunya pria dalam keluarganya. Suatu hari, Tanjirou pergi ke desa terdekat untuk menjual arang demi mendapatkan sedikit uang. Namun, saat ia kembali, hidupnya berubah menjadi bagian dari rumor mengerikan itu: keluarganya dibantai, dan satu-satunya yang selamat, adiknya Nezuko, berubah menjadi iblis. Anehnya, Nezuko masih menunjukkan perilaku manusia, yang menjadi alasan Tanjirou untuk bergabung dengan pembasmi iblis dan mencari cara untuk menyembuhkan adiknya. Akankah Tanjirou berhasil bergabung dengan korps elit pembasmi iblis dan menyelamatkan Nezuko?",
+    genre: "Animasi, Aksi, Petualangan",
+    director: "N/A",
+    rated: "TV-MA",
+    poster:
+        "https://m.media-amazon.com/images/M/MV5BMWU1OGEwNmQtNGM3MS00YTYyLThmYmMtN2FjYzQzNzNmNTE0XkEyXkFqcGc@._V1_SX300.jpg",
+    runTime: "25 menit",
+    rating: 8.6,
+    votes: 171769,
+    watchlist: 152773 ,
+  ),
+  Movie(
+    id: "tt3107288",
+    title: "The Flash",
+    plot:
+        "Barry Allen terkena sambaran petir dan jatuh koma selama 9 bulan. Setelah terbangun dari komanya, Barry bertemu dengan Cisco Ramon, Harrison Wells, dan Caitlin Snow. Tidak lama kemudian, Barry menyadari bahwa dirinya memiliki kekuatan super, yang ternyata disebabkan oleh ledakan akselerator partikel.",
+    genre: "Aksi, Petualangan, Drama",
+    director: "N/A",
+    rated: "TV-PG",
+    poster:
+        "https://m.media-amazon.com/images/M/MV5BMjU0ZjZhNDQtMDhkYi00OWQyLWE3NGYtNzBlY2VmM2I4ZDg5XkEyXkFqcGc@._V1_SX300.jpg",
+    runTime: "43 menit",
+    rating: 7.5,
+    votes: 372870,
+    watchlist: 525270 ,
+  ),
+  Movie(
+    id: "tt0418279",
+    title: "Transformers",
+    plot:
+        "Siswa sekolah menengah Sam Witwicky membeli mobil pertamanya, yang ternyata adalah Autobot Bumblebee. Bumblebee melindungi Sam dan pacarnya, Mikaela Banes, dari Decepticon Barricade, sebelum Autobots lainnya tiba di Bumi. Mereka sedang mencari Allspark, dan perang di Bumi semakin memanas saat Decepticons menyerang pangkalan militer Amerika Serikat di Qatar. Sam dan Mikaela dibawa oleh agensi rahasia, Sector 7, untuk membantu menghentikan Decepticons. Namun, ketika mereka mengetahui bahwa agensi tersebut juga berniat untuk menghancurkan Autobots, mereka merencanakan strategi mereka sendiri untuk menyelamatkan dunia.",
+    genre: "Aksi, Petualangan, Fiksi Ilmiah",
+    director: "Michael Bay",
+    rated: "PG-13",
+    poster:
+        "https://m.media-amazon.com/images/M/MV5BZjM3ZDA2YmItMzhiMi00ZGI3LTg3ZGQtOTk3Nzk0MDY0ZDZhXkEyXkFqcGc@._V1_SX300.jpg",
+    runTime: "2 jam 24 menit",
+    rating: 7.1,
+    votes: 687177,
+    watchlist: 313002 ,
+  ),
+  Movie(
+    id: "tt2975590",
+    title: "Batman v Superman: Dawn of Justice",
+    plot:
+        "Masyarakat umum khawatir tentang keberadaan Superman di planet mereka dan membiarkan \"Ksatria Gelap\" - Batman - berkeliaran di jalanan Gotham. Sementara itu, Batman yang fobia terhadap kekuatan mencoba menyerang Superman. Di sisi lain, Superman berusaha untuk mengambil keputusan, sementara Lex Luthor, otak kriminal dan milyuner, berusaha memanfaatkan keuntungannya untuk melawan \"Man of Steel\".",
+    genre: "Aksi, Petualangan, Fiksi Ilmiah",
+    director: "Zack Snyder",
+    rated: "R",
+    poster:
+        "https://m.media-amazon.com/images/M/MV5BZTJkYjdmYjYtOGMyNC00ZGU1LThkY2ItYTc1OTVlMmE2YWY1XkEyXkFqcGc@._V1_SX300.jpg",
+    runTime: "2 jam 31 menit",
+    rating: 6.5,
+    votes: 762805,
+    watchlist: 608812 ,
+  ),
+  Movie(
+    id: "tt1877830",
+    title: "The Batman",
+    plot:
+        "Ketika seorang pembunuh berantai yang sadis mulai membunuh tokoh-tokoh politik penting di Gotham, Batman terpaksa menyelidiki korupsi tersembunyi di kota tersebut dan mempertanyakan keterlibatan keluarganya.",
+    genre: "Aksi, Kriminal, Drama",
+    director: "Matt Reeves",
+    rated: "PG-13",
+    poster:
+        "https://m.media-amazon.com/images/M/MV5BZTJkYjdmYjYtOGMyNC00ZGU1LThkY2ItYTc1OTVlMmE2YWY1XkEyXkFqcGc@._V1_SX300.jpg",
+    runTime: "2 jam 31 menit",
+    rating: 7.8,
+    votes: 840296,
+    watchlist: 527129 ,
+  ),
+  Movie(
+    id: "tt11126994",
+    title: "Arcane",
+    plot:
+        "Keseimbangan yang rapuh antara kota kaya Piltover dan sisi gelap Zaun. Ketegangan antara kedua kota-negara ini semakin memuncak dengan terciptanya Hextech, sebuah cara bagi siapa saja untuk mengendalikan energi magis di Piltover, sementara di Zaun, obat baru bernama Shimmer mengubah manusia menjadi monster. Persaingan antara kedua kota ini memecah keluarga dan persahabatan, sementara *Arcane* menghidupkan hubungan-hubungan yang membentuk beberapa pahlawan terkenal dari *League of Legends*, termasuk Vi, Jinx, Caitlyn, Jayce, dan Viktor.",
+    genre: "Animasi, Aksi, Petualangan",
+    director: "N/A",
+    rated: "TV-14",
+    poster:
+        "https://m.media-amazon.com/images/M/MV5BOWJhYjdjNWEtMWFmNC00ZjNkLThlZGEtN2NkM2U3NTVmMjZkXkEyXkFqcGc@._V1_SX300.jpg",
+    runTime: "2 jam 31 menit",
+    rating: 9.1,
+    votes: 343453,
+    watchlist: 274622 ,
+  ),
 ];
