@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:movie_application/screens/login_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:movie_application/screens/login_screen.dart'; // Ganti dengan path layar login Anda
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -11,6 +12,20 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   String name = "John Doe";
   String email = "johndoe@example.com";
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  void _loadUserData() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      name = prefs.getString('username') ?? "John Doe";
+      email = prefs.getString('email') ?? "johndoe@example.com";
+    });
+  }
 
   void _editProfile() {
     TextEditingController nameController = TextEditingController(text: name);
@@ -46,11 +61,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: const Text("Cancel"),
             ),
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 setState(() {
                   name = nameController.text;
                   email = emailController.text;
                 });
+
+                // Simpan perubahan ke SharedPreferences
+                final prefs = await SharedPreferences.getInstance();
+                await prefs.setString('username', name);
+                await prefs.setString('email', email);
+
                 Navigator.pop(context); // Tutup dialog
               },
               child: const Text("Save"),
@@ -61,16 +82,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  void _logout() {
-    // Misalnya menghapus data pengguna atau token otentikasi
-    // Contoh: await SharedPreferences.getInstance().then((prefs) => prefs.clear());
+  void _logout() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
 
-    // Setelah logout, arahkan pengguna ke layar login
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(
-          builder: (context) =>
-              const LoginScreen()), // Pastikan Anda memiliki LoginScreen
+      MaterialPageRoute(builder: (context) => const LoginScreen()),
     );
   }
 
@@ -85,7 +103,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // Foto Profil
             const Padding(
               padding: EdgeInsets.all(16.0),
               child: CircleAvatar(
@@ -93,7 +110,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 backgroundImage: AssetImage('images/profile.jpg'),
               ),
             ),
-            // Nama Pengguna
             Text(
               name,
               style: const TextStyle(
@@ -102,7 +118,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
             ),
             const SizedBox(height: 8),
-            // Email Pengguna
             Text(
               email,
               style: TextStyle(
@@ -111,7 +126,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
             ),
             const SizedBox(height: 16),
-            // Informasi Lain
             const ListTile(
               leading: Icon(Icons.phone, color: Colors.black),
               title: Text('Phone Number'),
@@ -123,13 +137,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
               subtitle: Text('123 Main Street, Jakarta'),
             ),
             const Divider(),
-            // Tombol Aksi
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Column(
                 children: [
                   ElevatedButton.icon(
-                    onPressed: _editProfile, // Fungsi edit profile
+                    onPressed: _editProfile,
                     icon: const Icon(Icons.edit),
                     label: const Text('Edit Profile'),
                     style: ElevatedButton.styleFrom(
@@ -141,7 +154,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   const SizedBox(height: 10),
                   ElevatedButton.icon(
-                    onPressed: _logout, // Fungsi logout
+                    onPressed: _logout,
                     icon: const Icon(Icons.logout),
                     label: const Text('Logout'),
                     style: ElevatedButton.styleFrom(
