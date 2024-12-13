@@ -108,7 +108,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         showDialog(
                           context: context,
                           builder: (BuildContext context) {
-                            TextEditingController emailController = TextEditingController();
+                            TextEditingController emailController =
+                                TextEditingController();
 
                             return AlertDialog(
                               title: const Text("Reset Password"),
@@ -143,14 +144,17 @@ class _LoginScreenState extends State<LoginScreen> {
 
                                     if (_validateEmail(email)) {
                                       // Logika untuk mengirim email reset password
-                                      ScaffoldMessenger.of(context).showSnackBar(
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
                                         const SnackBar(
-                                          content: Text('Email reset password telah dikirim'),
+                                          content: Text(
+                                              'Email reset password telah dikirim'),
                                         ),
                                       );
                                       Navigator.pop(context);
                                     } else {
-                                      ScaffoldMessenger.of(context).showSnackBar(
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
                                         const SnackBar(
                                           content: Text('Email tidak valid'),
                                         ),
@@ -215,7 +219,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => const RegisterScreen()),
+                            MaterialPageRoute(
+                                builder: (context) => const RegisterScreen()),
                           );
                         },
                         child: const Text(
@@ -238,21 +243,21 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-    bool _validateLogin(String email, String password) {
-      for (User user in userList) {
-        if (user.email == email && user.password == password) {
-          return true;
-        }
+  bool _validateLogin(String email, String password) {
+    for (User user in userList) {
+      if (user.email == email && user.password == password) {
+        return true;
       }
-      return false;
     }
+    return false;
+  }
 
-    bool _validateEmail(String email) {
-      for (User user in userList) {
-        if (user.email == email) {
-          return true; // Email ditemukan di userList
-        }
+  bool _validateEmail(String email) {
+    for (User user in userList) {
+      if (user.email == email) {
+        return true; // Email ditemukan di userList
       }
-      return false; // Email tidak ditemukan
     }
+    return false; // Email tidak ditemukan
+  }
 }

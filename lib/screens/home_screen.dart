@@ -42,14 +42,13 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Movieku"),
+        title: const Text("CineMate"),
         actions: [
           IconButton(
             onPressed: () {},
-            icon: Icon(
+            icon: const Icon(
               Icons.notifications,
               size: 25,
-              color: Theme.of(context).colorScheme.primary,
             ),
             padding: EdgeInsets.zero,
           ),
@@ -65,12 +64,16 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 15, right: 15),
+              const Padding(
+                padding: EdgeInsets.only(left: 15, right: 15),
                 child: Text(
                   "Daftar Film",
                   textAlign: TextAlign.left,
-                  style: Theme.of(context).textTheme.titleMedium,
+                  style: TextStyle(
+                    color: Color.fromARGB(255, 42, 41, 52),
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
               Padding(
@@ -81,8 +84,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     OutlinedButton(
                       style: OutlinedButton.styleFrom(
-                        side: BorderSide(
-                          color: Theme.of(context).colorScheme.secondary,
+                        side: const BorderSide(
+                          color: Color.fromARGB(255, 97, 96, 96),
                         ),
                         padding: const EdgeInsets.symmetric(
                           vertical: 5,
@@ -93,15 +96,19 @@ class _HomeScreenState extends State<HomeScreen> {
                       onPressed: () {
                         Navigator.pushNamed(context, '/list-movie');
                       },
-                      child: Text(
+                      child: const Text(
                         "Semua Film",
-                        style: Theme.of(context).textTheme.labelSmall,
+                        style: TextStyle(
+                          color: Color.fromARGB(255, 11, 3, 50),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12,
+                        ),
                       ),
                     ),
                     OutlinedButton.icon(
                       style: OutlinedButton.styleFrom(
-                        side: BorderSide(
-                          color: Theme.of(context).colorScheme.secondary,
+                        side: const BorderSide(
+                          color: Color.fromARGB(255, 97, 96, 96),
                         ),
                         padding: const EdgeInsets.symmetric(
                           vertical: 5,
@@ -117,23 +124,31 @@ class _HomeScreenState extends State<HomeScreen> {
                         size: 15,
                         color: Colors.pink,
                       ),
-                      label: Text(
+                      label: const Text(
                         "Watchlist Saya",
-                        style: Theme.of(context).textTheme.labelSmall,
+                        style: TextStyle(
+                          color: Color.fromARGB(255, 11, 3, 50),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12,
+                        ),
                       ),
                     ),
                   ],
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(
+              const Padding(
+                padding: EdgeInsets.only(
                   left: 15,
                   right: 15,
                   bottom: 10,
                 ),
                 child: Text(
                   "Rekomendasi Kami",
-                  style: Theme.of(context).textTheme.titleMedium,
+                  style: TextStyle(
+                    color: Color.fromARGB(255, 42, 41, 52),
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
               CarouselSlider.builder(
@@ -196,13 +211,20 @@ class _HomeScreenState extends State<HomeScreen> {
                           activeMovie.title.toUpperCase(),
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
-                          style: Theme.of(context).textTheme.titleLarge,
+                          style: const TextStyle(
+                            color: Color.fromARGB(255, 42, 41, 52),
+                            fontSize: 18,
+                            fontWeight: FontWeight.w900,
+                          ),
                           textAlign: TextAlign.center,
                         ),
                         Text.rich(
                           textAlign: TextAlign.center,
                           TextSpan(
-                            style: Theme.of(context).textTheme.bodySmall,
+                            style: const TextStyle(
+                              color: Color.fromARGB(255, 11, 3, 50),
+                              fontSize: 12,
+                            ),
                             children: [
                               const TextSpan(
                                 text: "Rating film ini ",
@@ -216,7 +238,11 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                               TextSpan(
                                 text: activeMovie.rating.toStringAsFixed(1),
-                                style: Theme.of(context).textTheme.labelSmall,
+                                style: const TextStyle(
+                                  color: Color.fromARGB(255, 11, 3, 50),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 12,
+                                ),
                               ),
                               const TextSpan(
                                 text: " lho, penasaran ngga sebagus apa?",
@@ -229,14 +255,18 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(
+              const Padding(
+                padding: EdgeInsets.symmetric(
                   horizontal: 15,
                   vertical: 15,
                 ),
                 child: Text(
                   "Kategori Genre",
-                  style: Theme.of(context).textTheme.titleMedium,
+                  style: TextStyle(
+                    color: Color.fromARGB(255, 42, 41, 52),
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
               Padding(
@@ -259,8 +289,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 (selectedButton == buttonLabels[index]
                                     ? const Color.fromARGB(255, 220, 218, 241)
                                     : null),
-                            side: BorderSide(
-                              color: Theme.of(context).colorScheme.secondary,
+                            side: const BorderSide(
+                              color: Color.fromARGB(255, 97, 96, 96),
                             ),
                             padding: const EdgeInsets.symmetric(
                               vertical: 5,
@@ -273,7 +303,11 @@ class _HomeScreenState extends State<HomeScreen> {
                           },
                           child: Text(
                             buttonLabels[index],
-                            style: Theme.of(context).textTheme.labelSmall,
+                            style: const TextStyle(
+                              color: Color.fromARGB(255, 11, 3, 50),
+                              fontWeight: FontWeight.bold,
+                              fontSize: 12,
+                            ),
                           ),
                         ),
                       );
