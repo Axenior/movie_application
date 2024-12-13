@@ -7,6 +7,7 @@ import 'package:movie_application/screens/detail_screen.dart';
 import 'package:movie_application/screens/home_screen.dart';
 import 'package:movie_application/screens/list_movie_screen.dart';
 import 'package:movie_application/screens/watchlist_screen.dart';
+import 'package:movie_application/screens/splash_screen.dart'; 
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
@@ -19,16 +20,10 @@ void main() async {
     isLoggedIn: isLoggedIn,
   ));
 }
-// void main() {
-//   runApp(
-//     MainApp(),
-//   );
-// }
 
 class MainApp extends StatelessWidget {
   final bool isLoggedIn;
   const MainApp({super.key, required this.isLoggedIn});
-  // MainApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +40,10 @@ class MainApp extends StatelessWidget {
           ),
         ),
       ),
-      home: isLoggedIn ? const MainScreen() : const LoginScreen(),
+
+      home: SplashScreen(
+        isLoggedIn: isLoggedIn,
+      ),
       routes: {
         '/login': (context) => const LoginScreen(),
         '/register': (context) => const RegisterScreen(),
@@ -57,10 +55,7 @@ class MainApp extends StatelessWidget {
         },
         '/list-movie': (context) => const ListMovieScreen(),
         '/watchlist-movie': (context) => const WatchlistScreen(),
-        // '/profile': (context) => const ProfileScreen(),
       },
-      // home: const MainScreen(),
-      // home: DetailScreen(movie: movieList[0]),
     );
   }
 }
