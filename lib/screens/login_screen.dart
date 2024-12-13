@@ -143,7 +143,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                     String email = emailController.text;
 
                                     if (_validateEmail(email)) {
-                                      // Logika untuk mengirim email reset password
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(
                                         const SnackBar(
@@ -180,11 +179,22 @@ class _LoginScreenState extends State<LoginScreen> {
                       String email = _emailController.text;
                       String password = _passwordController.text;
 
-                      if (_validateLogin(email, password)) {
+                      User? loggedInUser;
+
+                      for (User user in userList) {
+                        if (user.email == email && user.password == password) {
+                          loggedInUser = user;
+                          break;
+                        }
+                      }
+
+                      if (loggedInUser != null) {
                         SharedPreferences prefs =
                             await SharedPreferences.getInstance();
                         await prefs.setBool('isLoggedIn', true);
-                        await prefs.setString('email', email);
+                        await prefs.setString('email', loggedInUser.email);
+                        await prefs.setString('username', loggedInUser.name);
+
                         Navigator.pushReplacementNamed(context, '/main');
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
@@ -243,21 +253,12 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  bool _validateLogin(String email, String password) {
+  bool _validateEmail(String email) {
     for (User user in userList) {
-      if (user.email == email && user.password == password) {
+      if (user.email == email) {
         return true;
       }
     }
     return false;
-  }
-
-  bool _validateEmail(String email) {
-    for (User user in userList) {
-      if (user.email == email) {
-        return true; // Email ditemukan di userList
-      }
-    }
-    return false; // Email tidak ditemukan
   }
 }
