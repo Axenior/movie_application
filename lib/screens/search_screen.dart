@@ -41,7 +41,7 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Movieku"),
+        title: const Text("CineMate"),
         actions: [
           IconButton(
             onPressed: () {},

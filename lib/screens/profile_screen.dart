@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:movie_application/screens/login_screen.dart'; // Ganti dengan path layar login Anda
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -11,7 +10,7 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   String name = "John Doe";
-  String email = "johndoe@example.com";
+  String email = "Johndoe@gmail.com";
 
   @override
   void initState() {
@@ -23,13 +22,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       name = prefs.getString('username') ?? "John Doe";
-      email = prefs.getString('email') ?? "johndoe@example.com";
+      email = prefs.getString('email') ?? "Johndoe@gmail.com";
     });
   }
 
   void _editProfile() {
     TextEditingController nameController = TextEditingController(text: name);
-    TextEditingController emailController = TextEditingController(text: email);
 
     showDialog(
       context: context,
@@ -45,12 +43,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   labelText: "Name",
                 ),
               ),
-              TextField(
-                controller: emailController,
-                decoration: const InputDecoration(
-                  labelText: "Email",
-                ),
-              ),
             ],
           ),
           actions: [
@@ -64,7 +56,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
               onPressed: () async {
                 setState(() {
                   name = nameController.text;
-                  email = emailController.text;
                 });
 
                 // Simpan perubahan ke SharedPreferences
@@ -84,12 +75,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   void _logout() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.clear();
+    await prefs.remove('isLoggedIn');
+    await prefs.remove('email');
+    await prefs.remove('username');
 
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const LoginScreen()),
-    );
+    Navigator.pushReplacementNamed(context, '/login');
   }
 
   @override
