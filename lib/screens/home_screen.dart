@@ -25,7 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
     "Animasi",
   ];
 
-  String selectedButton = "Aksi";
+  late String selectedButton = buttonLabels[0];
 
   @override
   void initState() {
