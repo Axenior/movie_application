@@ -1,9 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:movie_application/models/movie.dart';
-import 'package:movie_application/data/movie_data.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:movie_application/models/movie_list.dart';
+import 'package:movie_application/services/api_service.dart';
 
 class WatchlistScreen extends StatefulWidget {
   const WatchlistScreen({super.key});
@@ -13,20 +12,16 @@ class WatchlistScreen extends StatefulWidget {
 }
 
 class _WatchlistScreenState extends State<WatchlistScreen> {
-  List<Movie> _movieWatchlist = [];
-  List<String> watchlistId = [];
+  final ApiService _apiService = ApiService();
+
+  List<MovieList> _movieWatchlist = [];
 
   Future<void> _loadWatchlist() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? email = prefs.getString('email');
-
-    if (email != null) {
-      watchlistId = prefs.getStringList('watchlist-$email') ?? [];
-      _movieWatchlist =
-          movieList.where((movie) => watchlistId.contains(movie.id)).toList();
-    }
-
-    setState(() {});
+    final List<Map<String, dynamic>> movieData =
+        await _apiService.getMoviesWatchlist();
+    setState(() {
+      _movieWatchlist = movieData.map((e) => MovieList.fromJson(e)).toList();
+    });
   }
 
   @override
@@ -69,13 +64,13 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
                       maxCrossAxisExtent: 200,
                       crossAxisSpacing: 10,
                       mainAxisSpacing: 20,
-                      childAspectRatio: 2 / 4.2,
+                      childAspectRatio: 2 / 3.8,
                     ),
                     itemBuilder: (context, index) {
                       return GestureDetector(
                         onTap: () {
                           Navigator.pushNamed(context, '/detail-movie',
-                                  arguments: _movieWatchlist[index])
+                                  arguments: _movieWatchlist[index].id)
                               .then(
                             (value) => setState(
                               () {
@@ -95,39 +90,11 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(10),
                                     child: CachedNetworkImage(
-                                      imageUrl: _movieWatchlist[index].poster,
+                                      imageUrl:
+                                          'https://image.tmdb.org/t/p/w500${_movieWatchlist[index].poster_path}',
                                       fit: BoxFit.cover,
                                       errorWidget: (context, url, error) =>
                                           const Icon(Icons.error),
-                                    ),
-                                  ),
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      _toggleWatchlist(
-                                          _movieWatchlist[index].id);
-                                    });
-                                  },
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(5.0),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        border: Border.all(color: Colors.white),
-                                        shape: BoxShape.circle,
-                                        color: Colors.grey.shade900
-                                            .withOpacity(0.4),
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(5.0),
-                                        child: Icon(
-                                          Icons.favorite,
-                                          color: watchlistId.contains(
-                                                  _movieWatchlist[index].id)
-                                              ? Colors.pink
-                                              : Colors.white,
-                                        ),
-                                      ),
                                     ),
                                   ),
                                 ),
@@ -146,39 +113,9 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
                             const SizedBox(height: 8),
                             Row(
                               children: [
-                                Container(
-                                  color: Colors.grey.shade400,
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: 4),
-                                  child: Text(
-                                    _movieWatchlist[index].rated,
-                                    style: TextStyle(
-                                      color: Colors.grey.shade600,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(width: 8),
-                                Expanded(
-                                  child: Text(
-                                    _movieWatchlist[index].genre,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: Colors.grey.shade600,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 8),
-                            Row(
-                              children: [
                                 RatingBarIndicator(
-                                  rating: _movieWatchlist[index].rating / 2,
+                                  rating:
+                                      _movieWatchlist[index].vote_average / 2,
                                   direction: Axis.horizontal,
                                   itemCount: 5,
                                   itemSize: 12,
@@ -190,7 +127,7 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
                                 const SizedBox(width: 4),
                                 Text(
                                   _movieWatchlist[index]
-                                      .rating
+                                      .vote_average
                                       .toStringAsFixed(1),
                                   style: const TextStyle(
                                     fontSize: 12,
@@ -209,24 +146,5 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
               ),
             ),
     );
-  }
-
-  void _toggleWatchlist(String movieId) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? email = prefs.getString('email');
-
-    if (email != null) {
-      List<String> updatedWatchlist =
-          prefs.getStringList('watchlist-$email') ?? [];
-
-      if (!updatedWatchlist.contains(movieId)) {
-        updatedWatchlist.add(movieId);
-      } else {
-        updatedWatchlist.remove(movieId);
-      }
-
-      await prefs.setStringList('watchlist-$email', updatedWatchlist);
-      _loadWatchlist(); // Reload the updated watchlist and movies
-    }
   }
 }

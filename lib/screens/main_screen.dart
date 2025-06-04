@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:movie_application/screens/feed_screen.dart';
 import 'package:movie_application/screens/home_screen.dart';
 import 'package:movie_application/screens/profile_screen.dart';
 import 'package:movie_application/screens/search_screen.dart';
@@ -16,6 +17,7 @@ class _MainScreenState extends State<MainScreen> {
   List<Widget> body = const [
     HomeScreen(),
     SearchScreen(),
+    FeedScreen(),
     ProfileScreen(),
   ];
 
@@ -26,6 +28,7 @@ class _MainScreenState extends State<MainScreen> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         selectedItemColor: Colors.amber,
+        unselectedItemColor: Colors.grey,
         onTap: (int newIndex) {
           setState(() {
             _currentIndex = newIndex;
@@ -39,6 +42,10 @@ class _MainScreenState extends State<MainScreen> {
           BottomNavigationBarItem(
             icon: Icon(Icons.search_outlined),
             label: "Search",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.feed_outlined),
+            label: "Feed",
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person_outlined),
