@@ -1,9 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:movie_application/data/movie_data.dart';
-import 'package:movie_application/models/movie.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:movie_application/models/movie_list.dart';
+import 'package:movie_application/services/api_service.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -13,21 +12,13 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-  List<Movie> data = [];
+  final ApiService _apiService = ApiService();
+  List<MovieList> _moviesBySearch = [];
+
   final SearchController _controller = SearchController();
-  // String _searchQuery = '';
   bool isSubmited = false;
 
-  List<String> watchlistId = [];
-
   Future<void> _loadWatchlist() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? email = prefs.getString('email');
-
-    if (email != null) {
-      watchlistId = prefs.getStringList('watchlist-$email') ?? [];
-    }
-
     setState(() {});
   }
 
@@ -71,7 +62,6 @@ class _SearchScreenState extends State<SearchScreen> {
                     child: SearchBar(
                       controller: _controller,
                       onTap: _onTap,
-                      onChanged: _onSearchChanged,
                       onSubmitted: _onSubmitted,
                       backgroundColor: const WidgetStatePropertyAll(
                         Color.fromARGB(125, 197, 197, 199),
@@ -93,7 +83,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   ),
                 ),
               ),
-              isSubmited && data.isEmpty
+              isSubmited && _moviesBySearch.isEmpty
                   ? Center(
                       child: Text(
                         "Movienya gak ada nih",
@@ -110,18 +100,18 @@ class _SearchScreenState extends State<SearchScreen> {
                 child: GridView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount: data.length,
+                  itemCount: _moviesBySearch.length,
                   gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                     maxCrossAxisExtent: 200,
                     crossAxisSpacing: 10,
                     mainAxisSpacing: 20,
-                    childAspectRatio: 2 / 4.2,
+                    childAspectRatio: 2 / 3.8,
                   ),
                   itemBuilder: (context, index) {
                     return GestureDetector(
                       onTap: () {
                         Navigator.pushNamed(context, '/detail-movie',
-                                arguments: data[index])
+                                arguments: _moviesBySearch[index].id)
                             .then(
                           (value) => setState(
                             () {
@@ -141,38 +131,11 @@ class _SearchScreenState extends State<SearchScreen> {
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10),
                                   child: CachedNetworkImage(
-                                    imageUrl: data[index].poster,
+                                    imageUrl:
+                                        'https://image.tmdb.org/t/p/w500${_moviesBySearch[index].poster_path}',
                                     fit: BoxFit.cover,
                                     errorWidget: (context, url, error) =>
                                         const Icon(Icons.error),
-                                  ),
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    _toggleWatchlist(data[index].id);
-                                  });
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.all(5.0),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.white),
-                                      shape: BoxShape.circle,
-                                      color:
-                                          Colors.grey.shade900.withOpacity(0.4),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(5.0),
-                                      child: Icon(
-                                        Icons.favorite,
-                                        color:
-                                            watchlistId.contains(data[index].id)
-                                                ? Colors.pink
-                                                : Colors.white,
-                                      ),
-                                    ),
                                   ),
                                 ),
                               ),
@@ -180,7 +143,7 @@ class _SearchScreenState extends State<SearchScreen> {
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            data[index].title,
+                            _moviesBySearch[index].title,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: const TextStyle(
@@ -191,39 +154,8 @@ class _SearchScreenState extends State<SearchScreen> {
                           const SizedBox(height: 8),
                           Row(
                             children: [
-                              Container(
-                                color: Colors.grey.shade400,
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 4),
-                                child: Text(
-                                  data[index].rated,
-                                  style: TextStyle(
-                                    color: Colors.grey.shade600,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                child: Text(
-                                  data[index].genre,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.grey.shade600,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 8),
-                          Row(
-                            children: [
                               RatingBarIndicator(
-                                rating: data[index].rating / 2,
+                                rating: _moviesBySearch[index].vote_average / 2,
                                 direction: Axis.horizontal,
                                 itemCount: 5,
                                 itemSize: 18,
@@ -234,7 +166,9 @@ class _SearchScreenState extends State<SearchScreen> {
                               ),
                               const SizedBox(width: 4),
                               Text(
-                                data[index].rating.toStringAsFixed(1),
+                                _moviesBySearch[index]
+                                    .vote_average
+                                    .toStringAsFixed(1),
                                 style: const TextStyle(
                                   fontSize: 12,
                                   color: Colors.amber,
@@ -262,40 +196,16 @@ class _SearchScreenState extends State<SearchScreen> {
     });
   }
 
-  // This function handles text changes in the search bar
-  void _onSearchChanged(String query) {
+  void _onSubmitted(String title) async {
+    final List<Map<String, dynamic>> moviesBySeacrh =
+        await _apiService.searchMovie(title);
     setState(() {
-      data = movieList
-          .where((Movie movie) =>
-              movie.title.toLowerCase().contains(query.toLowerCase()))
-          .toList();
-      if (query == '') {
-        data = [];
-      }
+      _moviesBySearch =
+          moviesBySeacrh.map((e) => MovieList.fromJson(e)).toList();
     });
-  }
 
-  void _onSubmitted(String query) {
     setState(() {
       isSubmited = true;
     });
-  }
-
-  void _toggleWatchlist(String movieId) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? email = prefs.getString('email'); // Ensure 'email' is available.
-
-    if (email != null) {
-      List<String> watchlist = prefs.getStringList('watchlist-$email') ?? [];
-
-      if (!watchlist.contains(movieId)) {
-        watchlist.add(movieId);
-      } else {
-        watchlist.remove(movieId);
-      }
-
-      await prefs.setStringList('watchlist-$email', watchlist);
-      _loadWatchlist();
-    }
   }
 }
