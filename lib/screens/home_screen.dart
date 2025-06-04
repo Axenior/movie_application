@@ -1,8 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/material.dart';
-import 'package:movie_application/data/movie_data.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:movie_application/models/movie.dart';
+import 'package:flutter/material.dart';
+import 'package:movie_application/models/genre.dart';
+import 'package:movie_application/models/movie_list.dart';
+import 'package:movie_application/services/api_service.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -12,30 +13,44 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<Movie> data = [];
-  late List<Movie> sortedMovie;
-  late Movie activeMovie;
+  final ApiService _apiService = ApiService();
 
-  final List<String> buttonLabels = [
-    "Aksi",
-    "Petualangan",
-    "Fiksi Ilmiah",
-    "Keluarga",
-    "Komedi",
-    "Animasi",
-  ];
+  List<Genre> _genres = [];
+  List<MovieList> _trendingMovies = [];
+  List<MovieList> _moviesByCategory = [];
 
-  String selectedButton = "Aksi";
+  bool _isLoadingTrendingMovies = true;
+
+  MovieList? activeMovie;
+  Genre? selectedButton;
+
+  Future<void> _loadData() async {
+    final List<Map<String, dynamic>> genresData =
+        await _apiService.getListGenre();
+    final List<Map<String, dynamic>> trendingMoviesData =
+        await _apiService.getTrendingMovies();
+
+    setState(() {
+      _isLoadingTrendingMovies = false;
+      _genres = genresData.map((e) => Genre.fromJson(e)).toList();
+      _trendingMovies =
+          trendingMoviesData.map((e) => MovieList.fromJson(e)).toList();
+    });
+    activeMovie = _trendingMovies[0];
+    selectedButton = _genres[0];
+
+    final List<Map<String, dynamic>> moviesByCategoryData =
+        await _apiService.getMoviesByCategory(selectedButton!.id);
+    setState(() {
+      _moviesByCategory =
+          moviesByCategoryData.map((e) => MovieList.fromJson(e)).toList();
+    });
+  }
 
   @override
   void initState() {
     super.initState();
-    sortedMovie = movieList.toList();
-    sortedMovie.sort((a, b) => b.rating.compareTo(a.rating));
-    sortedMovie = sortedMovie.take(5).toList();
-    activeMovie = sortedMovie[0];
-
-    _setData(selectedButton);
+    _loadData();
   }
 
   @override
@@ -64,47 +79,12 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Padding(
-                padding: EdgeInsets.only(left: 15, right: 15),
-                child: Text(
-                  "Daftar Film",
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                    color: Color.fromARGB(255, 42, 41, 52),
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
               Padding(
                 padding:
                     const EdgeInsets.symmetric(vertical: 8, horizontal: 15),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    OutlinedButton(
-                      style: OutlinedButton.styleFrom(
-                        side: const BorderSide(
-                          color: Color.fromARGB(255, 97, 96, 96),
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 5,
-                          horizontal: 10,
-                        ),
-                        minimumSize: Size.zero,
-                      ),
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/list-movie');
-                      },
-                      child: const Text(
-                        "Semua Film",
-                        style: TextStyle(
-                          color: Color.fromARGB(255, 11, 3, 50),
-                          fontWeight: FontWeight.bold,
-                          fontSize: 12,
-                        ),
-                      ),
-                    ),
                     OutlinedButton.icon(
                       style: OutlinedButton.styleFrom(
                         side: const BorderSide(
@@ -127,7 +107,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       label: const Text(
                         "Watchlist Saya",
                         style: TextStyle(
-                          color: Color.fromARGB(255, 11, 3, 50),
                           fontWeight: FontWeight.bold,
                           fontSize: 12,
                         ),
@@ -145,116 +124,121 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Text(
                   "Rekomendasi Kami",
                   style: TextStyle(
-                    color: Color.fromARGB(255, 42, 41, 52),
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
-              CarouselSlider.builder(
-                itemCount: sortedMovie.length,
-                options: CarouselOptions(
-                  enlargeCenterPage: true,
-                  viewportFraction: 0.5,
-                  autoPlay: true,
-                  height: 300,
-                  onPageChanged: (index, reason) {
-                    setState(() {
-                      activeMovie = sortedMovie[index]; // Update active movie
-                    });
-                  },
-                ),
-                itemBuilder: (context, index, realIdx) {
-                  return Padding(
-                    padding: const EdgeInsets.only(left: 8),
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.pushNamed(context, '/detail-movie',
-                            arguments: sortedMovie[index]);
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: CachedNetworkImage(
-                            imageUrl: sortedMovie[index].poster,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
+              _isLoadingTrendingMovies
+                  ? const Center(child: CircularProgressIndicator())
+                  : CarouselSlider.builder(
+                      itemCount: _trendingMovies.length,
+                      options: CarouselOptions(
+                        enlargeCenterPage: true,
+                        viewportFraction: 0.5,
+                        autoPlay: true,
+                        height: 300,
+                        onPageChanged: (index, reason) {
+                          setState(() {
+                            activeMovie = _trendingMovies[index];
+                          });
+                        },
                       ),
-                    ),
-                  );
-                },
-              ),
-              Container(
-                alignment: Alignment.center,
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                      colors: [
-                        Color.fromARGB(255, 220, 218, 241),
-                        Colors.white
-                      ], // Warna gradasi
-                      begin: Alignment.bottomCenter,
-                      end: Alignment.topCenter),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 18,
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                    child: Column(
-                      children: [
-                        Text(
-                          activeMovie.title.toUpperCase(),
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                          style: const TextStyle(
-                            color: Color.fromARGB(255, 42, 41, 52),
-                            fontSize: 18,
-                            fontWeight: FontWeight.w900,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                        Text.rich(
-                          textAlign: TextAlign.center,
-                          TextSpan(
-                            style: const TextStyle(
-                              color: Color.fromARGB(255, 11, 3, 50),
-                              fontSize: 12,
+                      itemBuilder: (context, index, realIdx) {
+                        return Padding(
+                          padding: const EdgeInsets.only(left: 8),
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.pushNamed(context, '/detail-movie',
+                                  arguments: _trendingMovies[index].id);
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: CachedNetworkImage(
+                                  imageUrl:
+                                      'https://image.tmdb.org/t/p/w500${_trendingMovies[index].poster_path}',
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
                             ),
+                          ),
+                        );
+                      },
+                    ),
+              _isLoadingTrendingMovies
+                  ? const SizedBox.shrink()
+                  : Container(
+                      alignment: Alignment.center,
+                      decoration: const BoxDecoration(
+                        gradient: LinearGradient(
+                            colors: [
+                              Color.fromARGB(255, 220, 218, 241),
+                              Colors.white
+                            ],
+                            begin: Alignment.bottomCenter,
+                            end: Alignment.topCenter),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 18,
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 15),
+                          child: Column(
                             children: [
-                              const TextSpan(
-                                text: "Rating film ini ",
-                              ),
-                              const WidgetSpan(
-                                child: Icon(
-                                  Icons.star,
-                                  color: Colors.amber,
-                                  size: 15, // Icon size
-                                ),
-                              ),
-                              TextSpan(
-                                text: activeMovie.rating.toStringAsFixed(1),
+                              Text(
+                                activeMovie!.title.toUpperCase(),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
                                 style: const TextStyle(
-                                  color: Color.fromARGB(255, 11, 3, 50),
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 12,
+                                  color: Color.fromARGB(255, 42, 41, 52),
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w900,
                                 ),
+                                textAlign: TextAlign.center,
                               ),
-                              const TextSpan(
-                                text: " lho, penasaran ngga sebagus apa?",
+                              Text.rich(
+                                textAlign: TextAlign.center,
+                                TextSpan(
+                                  style: const TextStyle(
+                                    color: Color.fromARGB(255, 11, 3, 50),
+                                    fontSize: 12,
+                                  ),
+                                  children: [
+                                    const TextSpan(
+                                      text: "Rating film ini ",
+                                    ),
+                                    const WidgetSpan(
+                                      child: Icon(
+                                        Icons.star,
+                                        color: Colors.amber,
+                                        size: 15,
+                                      ),
+                                    ),
+                                    TextSpan(
+                                      text: activeMovie!.vote_average
+                                          .toStringAsFixed(1),
+                                      style: const TextStyle(
+                                        color: Color.fromARGB(255, 11, 3, 50),
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                    const TextSpan(
+                                      text: ", lagi trending akhir-akhir ini.",
+                                    ),
+                                  ],
+                                ),
                               ),
                             ],
                           ),
                         ),
-                      ],
+                      ),
                     ),
-                  ),
-                ),
-              ),
               const Padding(
                 padding: EdgeInsets.symmetric(
                   horizontal: 15,
@@ -263,7 +247,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Text(
                   "Kategori Genre",
                   style: TextStyle(
-                    color: Color.fromARGB(255, 42, 41, 52),
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                   ),
@@ -279,18 +262,16 @@ class _HomeScreenState extends State<HomeScreen> {
                   height: 30,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
-                    itemCount: buttonLabels.length,
+                    itemCount: _genres.length,
                     itemBuilder: (context, index) {
                       return Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
                         child: OutlinedButton(
                           style: OutlinedButton.styleFrom(
-                            backgroundColor:
-                                (selectedButton == buttonLabels[index]
-                                    ? const Color.fromARGB(255, 220, 218, 241)
-                                    : null),
-                            side: const BorderSide(
-                              color: Color.fromARGB(255, 97, 96, 96),
+                            side: BorderSide(
+                              color: (selectedButton == _genres[index]
+                                  ? Colors.amber
+                                  : Colors.grey),
                             ),
                             padding: const EdgeInsets.symmetric(
                               vertical: 5,
@@ -299,12 +280,11 @@ class _HomeScreenState extends State<HomeScreen> {
                             minimumSize: Size.zero,
                           ),
                           onPressed: () {
-                            _setData(buttonLabels[index]);
+                            _setData(_genres[index]);
                           },
                           child: Text(
-                            buttonLabels[index],
+                            _genres[index].name,
                             style: const TextStyle(
-                              color: Color.fromARGB(255, 11, 3, 50),
                               fontWeight: FontWeight.bold,
                               fontSize: 12,
                             ),
@@ -319,7 +299,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: 250,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  itemCount: data.length,
+                  itemCount: _moviesByCategory.length,
                   padding: const EdgeInsets.symmetric(horizontal: 5),
                   itemBuilder: (context, index) {
                     return Padding(
@@ -329,7 +309,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           Navigator.pushNamed(
                             context,
                             '/detail-movie',
-                            arguments: data[index],
+                            arguments: _moviesByCategory[index].id,
                           );
                         },
                         child: Container(
@@ -343,7 +323,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               ClipRRect(
                                 borderRadius: BorderRadius.circular(10),
                                 child: CachedNetworkImage(
-                                  imageUrl: data[index].poster,
+                                  imageUrl:
+                                      'https://image.tmdb.org/t/p/w500${_moviesByCategory[index].poster_path}',
                                   fit: BoxFit.cover,
                                   height: 200,
                                   width: 135,
@@ -353,7 +334,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 height: 8,
                               ),
                               Text(
-                                data[index].title.toUpperCase(),
+                                _moviesByCategory[index].title.toUpperCase(),
                                 textAlign: TextAlign.start,
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 2,
@@ -376,12 +357,13 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  void _setData(String query) {
+  void _setData(Genre query) async {
+    final List<Map<String, dynamic>> moviesByCategoryData =
+        await _apiService.getMoviesByCategory(query.id);
     setState(() {
       selectedButton = query;
-      data = movieList
-          .where((Movie movie) => movie.genre.contains(query))
-          .toList();
+      _moviesByCategory =
+          moviesByCategoryData.map((e) => MovieList.fromJson(e)).toList();
     });
   }
 }
