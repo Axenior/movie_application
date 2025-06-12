@@ -1,4 +1,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Izin yang diperlukan untuk lokasi -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <!-- Izin yang diperlukan untuk image_picker (kamera dan galeri) -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <!-- Untuk Android 10 (API level 29) ke atas, READ_EXTERNAL_STORAGE tidak selalu diperlukan untuk mengakses galeri jika menggunakan API modern. -->
+    <!-- Namun, untuk kompatibilitas yang lebih luas atau jika menargetkan versi Android yang lebih lama, ini bisa berguna. -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
     <application
         android:label="CineMate"
         android:name="${applicationName}"

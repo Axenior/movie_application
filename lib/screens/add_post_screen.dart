@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:geolocator/geolocator.dart';
+import 'dart:async'; // Import for TimeoutException
 import 'package:supabase_flutter/supabase_flutter.dart' as supabase_sdk;
 import 'package:flutter/foundation.dart' show kIsWeb;
 
@@ -23,13 +24,17 @@ class _AddPostScreenState extends State<AddPostScreen> {
   File? _imageFileForUpload; // Hanya untuk mobile
   Uint8List? _imageBytesForUpload; // Hanya untuk web
 
+  // Separate loading states
+  bool _isUploadingPost = false;
+  bool _isFetchingLocation = false;
+
   Position? _currentPosition;
-  bool _isLoading = false;
 
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final supabase_sdk.SupabaseClient supabase =
       supabase_sdk.Supabase.instance.client;
+  static const Duration _defaultTimeout = Duration(seconds: 30);
 
   Future<void> _pickImage(ImageSource source) async {
     final XFile? pickedFile = await _picker.pickImage(source: source);
@@ -53,7 +58,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
 
   Future<void> _getCurrentLocation() async {
     setState(() {
-      _isLoading = true; // Set loading for location
+      _isFetchingLocation = true;
     });
     bool serviceEnabled;
     LocationPermission permission;
@@ -65,7 +70,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
             const SnackBar(content: Text('Layanan lokasi dinonaktifkan.')));
       }
       setState(() {
-        _isLoading = false;
+        _isFetchingLocation = false;
       });
       return;
     }
@@ -79,7 +84,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
               const SnackBar(content: Text('Izin lokasi ditolak.')));
         }
         setState(() {
-          _isLoading = false;
+          _isFetchingLocation = false;
         });
         return;
       }
@@ -92,21 +97,40 @@ class _AddPostScreenState extends State<AddPostScreen> {
                 'Izin lokasi ditolak secara permanen, kami tidak dapat meminta izin.')));
       }
       setState(() {
-        _isLoading = false;
+        _isFetchingLocation = false;
       });
       return;
     }
 
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
-    setState(() {
-      _currentPosition = position;
-      _isLoading = false; // Stop loading for location
-    });
-    if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(
-              'Lokasi ditemukan: ${_currentPosition!.latitude.toStringAsFixed(4)}, ${_currentPosition!.longitude.toStringAsFixed(4)}')));
+    try {
+      Position position = await Geolocator.getCurrentPosition(
+              desiredAccuracy: LocationAccuracy.high)
+          .timeout(_defaultTimeout);
+      if (mounted) {
+        setState(() {
+          _currentPosition = position;
+          _isFetchingLocation = false;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(
+                'Lokasi ditemukan: ${position.latitude.toStringAsFixed(4)}, ${position.longitude.toStringAsFixed(4)}')));
+      }
+    } on TimeoutException {
+      if (mounted) {
+        setState(() {
+          _isFetchingLocation = false;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Gagal mendapatkan lokasi: Waktu habis.')));
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _isFetchingLocation = false;
+        });
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('Gagal mendapatkan lokasi: $e')));
+      }
     }
   }
 
@@ -124,20 +148,22 @@ class _AddPostScreenState extends State<AddPostScreen> {
               path,
               _imageBytesForUpload!,
               fileOptions: const supabase_sdk.FileOptions(upsert: false),
-            );
+            ).timeout(_defaultTimeout);
       } else if (_imageFileForUpload != null) {
         await supabase.storage.from('postimages').upload(
               path,
               _imageFileForUpload!,
               fileOptions: const supabase_sdk.FileOptions(upsert: false),
-            );
+            ).timeout(_defaultTimeout);
       } else {
         return null;
       }
-
       final String publicUrl =
           supabase.storage.from('postimages').getPublicUrl(path);
       return publicUrl;
+    } on TimeoutException {
+      print('Supabase Storage Upload Timeout: Image upload timed out.');
+      throw Exception('Image upload timed out.');
     } catch (e) {
       print('Supabase Storage Upload Error: $e');
       rethrow;
@@ -154,7 +180,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
     }
 
     setState(() {
-      _isLoading = true;
+      _isUploadingPost = true;
     });
 
     try {
@@ -181,7 +207,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
               content: Text('Anda harus login untuk mengunggah.')));
         }
         setState(() {
-          _isLoading = false;
+          _isUploadingPost = false;
         });
         return;
       }
@@ -194,7 +220,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
         'latitude': _currentPosition?.latitude,
         'longitude': _currentPosition?.longitude,
         'repliesCount': 0,
-      });
+      }).timeout(_defaultTimeout);
 
       if (mounted) {
         _captionController.clear();
@@ -203,7 +229,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
           _imageFileForUpload = null;
           _imageBytesForUpload = null;
           _currentPosition = null;
-          _isLoading = false;
+          _isUploadingPost = false;
         });
         ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Postingan berhasil diunggah!')));
@@ -212,7 +238,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
     } catch (e) {
       if (mounted) {
         setState(() {
-          _isLoading = false;
+          _isUploadingPost = false;
         });
         ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text('Gagal mengunggah postingan: $e')));
@@ -233,7 +259,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
       appBar: AppBar(
         title: const Text('Buat Postingan Baru'),
       ),
-      body: _isLoading
+      body: _isUploadingPost || _isFetchingLocation
           ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
               padding: const EdgeInsets.all(16.0),
