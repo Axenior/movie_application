@@ -6,17 +6,15 @@ A simple movie browsing mobile application built with Flutter and integrated wit
 
 ## Preview
 
-### Home Screen
 
-![Home Screen](images/home.jpeg)
+### Home Screen
+<img src="images/home.jpeg" alt="Home Screen" width="250"/>
 
 ### Movie Detail Screen
-
-![Movie Detail](images/detail.jpeg)
+<img src="images/detail.jpeg" alt="Home Screen" width="250"/>
 
 ### Search Feature
-
-![Search Feature](images/search.jpeg)
+<img src="images/search.jpeg" alt="Home Screen" width="250"/>
 
 ---
 
